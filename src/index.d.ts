@@ -1,0 +1,82 @@
+type Class = { new(...args: any[]): any; };
+type RunCode = any;
+type RunJig = any;
+type RunLock = any;
+type RunInstance = any;
+type txid = string;
+
+type MintArgs = any | Array<any>;
+
+interface FTParams {
+  name: string;
+  metadata: Partial<PresentationMetadata | LicenseMetadata>;
+  symbol: string;
+  decimals?: number;
+  sealed?: boolean;
+  transferable?: boolean;
+  upgradable?: boolean;
+  [key: string]: any;
+}
+
+interface NFTParams {
+  name: string;
+  metadata: Partial<PresentationMetadata | LicenseMetadata>;
+  maxSupply?: number;
+  sealed?: boolean;
+  transferable?: boolean;
+  upgradable?: boolean;
+  [key: string]: any;
+}
+
+interface PresentationMetadata {
+  name: string;
+  description: string;
+  emoji: string;
+  image: MediaReference;
+  audio: MediaReference;
+  video: MediaReference;
+  glbModel: MediaReference;
+  [key: string]: any;
+}
+
+interface LicenseMetadata {
+  title: string;
+  author: string;
+  source: string;
+  license: string;
+  [key: string]: any;
+}
+
+type MediaReference = any;
+
+export class JigBox {
+  contract: RunCode;
+  jigs: RunJig[];
+  type: 'FT' | 'NFT';
+
+  static fromClass(contract: RunCode, type: string): Promise<JigBox>;
+  static fromOrigin(origin: string, type: string): Promise<JigBox>;
+
+  get balance(): number;
+  get balanceAsDecimal(): string;
+
+  send(owner: string | RunLock, amount: number): Promise<txid>;
+  sendMany(recipients: [string | RunLock, number][]): Promise<txid>;
+  sync(): Promise<void>;
+}
+
+export interface TokenInterface {
+  create(params: FTParams | NFTParams): Class;
+  deploy(params: FTParams | NFTParams | Class): Promise<RunCode>;
+  upgrade(origin: string, params: FTParams | NFTParams | Class): Promise<RunCode>;
+  mint(origin: string, recipients: MintArgs[]): Promise<txid>;
+  getJigBox(origin: string): Promise<JigBox>;
+}
+
+export interface UtilInterface {
+  upgradeClass(origin: string, newClass: Class, updated?: string[]): Promise<RunCode>
+}
+
+export function init(run: RunInstance): void;
+export const ft: TokenInterface;
+export const nft: TokenInterface;
