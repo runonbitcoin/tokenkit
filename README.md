@@ -7,9 +7,9 @@ Docs TODO
 Install
 
 ```console
-npm install tokenkit
+npm install @runonbitcoin/tokenkit
 # or
-yarn add tokenkit
+yarn add @runonbitcoin/tokenkit
 ```
 
 or
