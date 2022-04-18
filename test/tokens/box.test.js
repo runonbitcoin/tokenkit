@@ -182,6 +182,43 @@ describe('JigBox#sendMany()', () => {
 })
 
 
+describe('JigBox#burn()', () => {
+  let box
+  beforeEach(async () => {
+    const klass = await FT.deploy(ftFixture)
+    await FT.mint(klass.origin, [
+      [5000, run.owner.address],
+      [1000, run.owner.address],
+      [3000, run.owner.address],
+    ])
+
+    box = await FT.getJigBox(klass.origin)
+  })
+
+  it('burns amount of tokens', async () => {
+    assert.equal(box.balance, 9000)
+    const txid = await box.burn(4000)
+    assert.isString(txid)
+    assert.lengthOf(txid, 64)
+
+    assert.lengthOf(box.jigs, 1)
+    assert.equal(box.balance, 5000)
+  })
+
+  it('throws an error when insufficient balance', async () => {
+    const promise = box.burn(15000)
+    await assert.isRejected(promise, 'Not enough funds')
+  })
+
+  it('throws an error with NFT boxes', async () => {
+    const klass = await NFT.deploy(nftFixture)
+    const box = await NFT.getJigBox(klass.origin)
+    const promise = box.burn(4500)
+    await assert.isRejected(promise, /^Method unavailable/)
+  })
+})
+
+
 describe('JigBox#sync()', () => {
   it('refreshes the JigBox inventory', async () => {
     const klass = await FT.deploy(ftFixture)

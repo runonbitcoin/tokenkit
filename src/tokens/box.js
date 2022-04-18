@@ -71,7 +71,7 @@ export class JigBox {
   /**
    * Sends the specified amount of tokens to the given recipient.
    * 
-   * All jigs are combined before sending so the JibBox will always be
+   * All jigs are combined before sending so the JigBox will always be
    * consolidated to a single jig. Returns a txid.
    * 
    * An error will be throw if this is called on a JigBox with the type `NFT`.
@@ -129,6 +129,45 @@ export class JigBox {
     const txid = await tx.publish()
     await this.sync()
     return txid
+  }
+
+  /**
+   * Burns the specified amount of tokens.
+   * 
+   * All jigs are combined and split into two jigs. The jig containing the
+   * specified amount of tokens is then destroyed. This occurs over two
+   * transactions - the second (burning) txid is returned. 
+   * 
+   * An error will be throw if this is called on a JigBox with the type `NFT`.
+   * 
+   * @async
+   * @param {number} amount Tokens to burn
+   * @returns {Promise<string>}
+   */
+  async burn(amount) {
+    ensureFungibleToken(this)
+
+    // First tx is combine and split
+    const tx1 = new Run.Transaction()
+    if (this.jigs.length > 1) {
+      const jigs = this.jigs.slice(1)
+      tx1.update(() => this.jigs[0].combine(...jigs))
+    }
+    tx1.update(() => this.jigs[0].send(this.jigs[0].owner, amount))
+    await tx1.publish()
+    await this.sync()
+
+    // Get the jig we want to destroy
+    const jig = this.jigs.find(jig => jig.amount === amount)
+    await jig.sync()
+
+    // Second tx does ze burn
+    const tx2 = new Run.Transaction()
+    tx2.update(() => jig.destroy())
+    const txid2 = await tx2.publish()
+    await this.sync()
+    
+    return txid2
   }
 
   /**
