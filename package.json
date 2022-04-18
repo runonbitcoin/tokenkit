@@ -3,19 +3,39 @@
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
-  "main": "src/index.js",
+  "exports": {
+    ".": {
+      "require": "./dist/tokenkit.cjs.js",
+      "import": "./dist/tokenkit.esm.js"
+    },
+    "./*": {
+      "require": "./dist/*.cjs.js",
+      "import": "./dist/*.esm.js"
+    }
+  },
+  "browser": "dist/tokenkit.min.js",
+  "unpkg": "dist/tokenkit.min.js",
   "types": "src/index.d.ts",
+  "packageManager": "yarn@3.2.0",
   "scripts": {
-    "test": "mocha \"test/**/*.test.js\" --require esm && tsd"
+    "build": "yarn clean && node build.js",
+    "clean": "rm -rf dist",
+    "test": "mocha \"test/**/*.test.js\"",
+    "test:cjs": "yarn build && env LIB=dist/tokenkit.cjs mocha test/tokens/nft.test.js -g 'accepts a class'",
+    "test:mjs": "yarn build && env LIB=dist/tokenkit.mjs mocha test/tokens/nft.test.js -g 'accepts a class'",
+    "test:types": "tsd"
   },
   "devDependencies": {
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "esbuild": "^0.14.34",
+    "esbuild-plugin-globals": "^0.1.1",
     "esm": "^3.2.25",
     "mocha": "^9.2.2",
     "run-sdk": "^0.6.35",
     "tsd": "^0.20.0"
   },
-  "packageManager": "yarn@3.2.0"
+  "peerDependencies": {
+    "run-sdk": "*"
+  }
 }

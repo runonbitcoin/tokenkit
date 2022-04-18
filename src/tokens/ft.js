@@ -4,17 +4,32 @@ import {
   applyStaticProps,
   createClass,
   deployClass,
-  metadataSchema,
   upgradeClass,
-  validateParams,
 } from './shared.js'
+import {
+  metadataSchema,
+  validateString,
+  validateObject,
+  validateNumber,
+  validateParams,
+} from './validations.js'
 
 // Params validation Schema
 const schema = {
-  name: (val) => typeof val === 'string' && val.length > 0,
-  metadata: (val) => typeof val === 'object' && validateParams(val, metadataSchema),
-  symbol: (val) => typeof val === 'string' && val.length > 0,
-  decimals: (val) => (typeof val === 'number' && Number.isInteger(val) && val >= 0) || !val,
+  className: {
+    defaultValue: 'FT',
+    validate: validateString({ matches: /^[a-z]\w*$/i, min: 1, message: 'must be valid JavaScript class name' })
+  },
+  metadata: {
+    validate: validateObject({ schema: metadataSchema, message: 'must be valid RUN metadata' })
+  },
+  symbol: {
+    validate: validateString({ min: 1 })
+  },
+  decimals: {
+    defaultValue: 0,
+    validate: validateNumber({ integer: true, min: 0 })
+  },
 }
 
 /**
@@ -24,25 +39,23 @@ const schema = {
  * @returns {class}
  */
  export function create(params) {
-  validateParams(params, schema)
-
   const {
-    name,
+    className,
     metadata,
     symbol,
     decimals,
     transferable,
     ...props
-  } = params
+  } = validateParams(params, schema)
 
   // Dynamically create class from base
-  const klass = createClass(name, Run.extra.Token, transferable)
+  const klass = createClass(className, Run.extra.Token, transferable)
 
   // Set static props
   klass.metadata = metadata
   klass.sealed = false
   klass.symbol = symbol
-  klass.decimals = decimals || 0
+  klass.decimals = decimals
 
   // Attach arbitrary static props
   applyStaticProps(klass, props)

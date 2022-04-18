@@ -1,14 +1,14 @@
 export const ftFixture = {
-  name: 'FooCoin',
+  className: 'FooCoin',
   metadata: {
-    title: 'Foo Coin'
+    name: 'Foo Coin'
   },
   symbol: 'FOO',
 }
 
 export const nftFixture = {
-  name: 'FooNFT',
+  className: 'FooNFT',
   metadata: {
-    title: 'Foo bar'
+    name: 'Foo bar'
   }
 }

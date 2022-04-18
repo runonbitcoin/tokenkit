@@ -4,16 +4,28 @@ import {
   applyStaticProps,
   createClass,
   deployClass,
-  metadataSchema,
   upgradeClass,
-  validateParams,
 } from './shared.js'
+import {
+  metadataSchema,
+  validateString,
+  validateObject,
+  validateNumber,
+  validateParams,
+} from './validations.js'
 
 // Params validation Schema
 const schema = {
-  name: (val) => typeof val === 'string' && val.length > 0,
-  metadata: (val) => typeof val === 'object' && validateParams(val, metadataSchema),
-  maxSupply: (val) => (typeof val === 'number' && Number.isInteger(val) && val > 0) || !val,
+  className: {
+    defaultValue: 'NFT',
+    validate: validateString({ matches: /^[a-z]\w*$/i, min: 1, message: 'must be valid JavaScript class name' })
+  },
+  metadata: {
+    validate: validateObject({ schema: metadataSchema, message: 'must be valid RUN metadata' })
+  },
+  maxSupply: {
+    validate: validateNumber({ integer: true, min: 1, allowBlank: true })
+  }
 }
 
 /**
@@ -23,18 +35,16 @@ const schema = {
  * @returns {class}
  */
 export function create(params) {
-  validateParams(params, schema)
-
   const {
-    name,
+    className,
     metadata,
     maxSupply,
     transferable,
     ...props
-  } = params
+  } = validateParams(params, schema)
 
   // Dynamically create class from base
-  const klass = createClass(name, NFT, transferable)
+  const klass = createClass(className, NFT, transferable)
 
   // Set static props
   klass.metadata = metadata

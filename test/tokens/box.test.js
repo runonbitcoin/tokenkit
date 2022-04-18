@@ -2,14 +2,14 @@ import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import { run } from '../support/run.js'
 import { ftFixture, nftFixture } from '../support/fixtures.js'
-import { JigBox } from '../../src/tokens/box.js'
 import tokenkit from '../../src/index.js'
-
-chai.use(chaiAsPromised)
-tokenkit.init(run)
+import { JigBox } from '../../src/tokens/box.js'
 
 const FT = tokenkit.ft
 const NFT = tokenkit.nft
+
+chai.use(chaiAsPromised)
+tokenkit.init(run)
 
 
 describe('JigBox', () => {

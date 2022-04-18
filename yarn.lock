@@ -93,10 +93,13 @@ __metadata:
     chai: ^4.3.6
     chai-as-promised: ^7.1.1
     esbuild: ^0.14.34
+    esbuild-plugin-globals: ^0.1.1
     esm: ^3.2.25
     mocha: ^9.2.2
     run-sdk: ^0.6.35
     tsd: ^0.20.0
+  peerDependencies:
+    run-sdk: "*"
   languageName: unknown
   linkType: soft
 
@@ -862,6 +865,13 @@ __metadata:
   version: 0.14.34
   resolution: "esbuild-openbsd-64@npm:0.14.34"
   conditions: os=openbsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"esbuild-plugin-globals@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "esbuild-plugin-globals@npm:0.1.1"
+  checksum: 07460a455174e280829e172096b70422a945bcaba0efbe2e71a88ccdcc194e0251c7a7cdc27fd5dda3420777dc6f7ee6312e1e3167af2627a67a39be7d7c373d
   languageName: node
   linkType: hard
 

@@ -2,8 +2,8 @@ import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import { run } from '../support/run.js'
 import { ftFixture as fixture } from '../support/fixtures.js'
-import { JigBox } from '../../src/tokens/box.js'
 import tokenkit from '../../src/index.js'
+import { JigBox } from '../../src/tokens/box.js'
 
 const FT = tokenkit.ft
 
@@ -17,7 +17,7 @@ describe('FT.create()', () => {
 
     assert.match(klass.toString(), /^class\s+/)
     assert.equal(klass.name, 'FooCoin')
-    assert.equal(klass.metadata.title, 'Foo Coin')
+    assert.equal(klass.metadata.name, 'Foo Coin')
     assert.equal(klass.symbol, 'FOO')
     assert.doesNotHaveAnyKeys(klass, ['location', 'origin', 'nonce', 'owner', 'satoshis'])
   })
@@ -57,13 +57,13 @@ describe('FT.create()', () => {
     assert.isUndefined(klass.foo)
   })
 
-  it('throws error when name is missing', () => {
-    assert.throws(() => {
-      FT.create({
-        ...fixture,
-        name: undefined,
-      })
-    }, 'name param is invalid')
+  it('has a default class name', () => {
+    const klass = FT.create({
+      ...fixture,
+      className: undefined,
+    })
+
+    assert.equal(klass.name, 'FT')
   })
 
   it('throws error when metadata is missing', () => {
@@ -72,7 +72,7 @@ describe('FT.create()', () => {
         ...fixture,
         metadata: undefined,
       })
-    }, 'metadata param is invalid')
+    }, /^'metadata' is invalid/)
   })
 
   it('throws error when symbol is missing', () => {
@@ -81,7 +81,7 @@ describe('FT.create()', () => {
         ...fixture,
         symbol: undefined,
       })
-    }, 'symbol param is invalid')
+    }, /^'symbol' is invalid/)
   })
 
   it('throws error when decimals is invalid', () => {
@@ -90,7 +90,7 @@ describe('FT.create()', () => {
         ...fixture,
         decimals: -23,
       })
-    }, 'decimals param is invalid')
+    }, /^'decimals' is invalid/)
   })
 })
 
@@ -168,11 +168,11 @@ describe('FT.upgrade()', () => {
 
     const upgraded = await FT.upgrade(klass.origin, {
       ...fixture,
-      metadata: { title: 'Foo Coin 2' },
+      metadata: { name: 'Foo Coin 2' },
       foo: 'baz',
     })
 
-    assert.equal(upgraded.metadata.title, 'Foo Coin 2')
+    assert.equal(upgraded.metadata.name, 'Foo Coin 2')
     assert.equal(upgraded.foo, 'baz')
   })
 
@@ -199,13 +199,13 @@ describe('FT.upgrade()', () => {
 
     const newClass = await FT.create({
       ...fixture,
-      metadata: { title: 'Foo Coin 2' },
+      metadata: { name: 'Foo Coin 2' },
       foo: 'baz',
     })
 
     const upgraded = await FT.upgrade(klass.origin, newClass)
 
-    assert.equal(upgraded.metadata.title, 'Foo Coin 2')
+    assert.equal(upgraded.metadata.name, 'Foo Coin 2')
     assert.equal(upgraded.foo, 'baz')
   })
 

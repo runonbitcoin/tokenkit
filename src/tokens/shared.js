@@ -1,12 +1,6 @@
 import Run from 'run-sdk'
 import $ from '../state.js'
 
-// Metadata validation schema
-// TODO
-export const metadataSchema = {
-
-}
-
 /**
  * Iterates over the given props and attaches them to the class as static properties.
  * Attaches literal values only, ignoring any functions.
@@ -114,26 +108,3 @@ export async function upgradeClass(origin, newClass, updated = []) {
   return klass
 }
 
-/**
- * Validates the params using the given schema. Throws an error if validation
- * fails.
- * 
- * @param {object} params Parameters
- * @param {object} schema Validation schema
- * @returns {boolean}
- */
-export function validateParams(params, schema) {
-  if (typeof params !== 'object') {
-    throw new Error(`invalid params`)
-  }
-
-  for (const key of Object.keys(schema)) {
-    const val = params[key]
-    const validator = schema[key]
-    if (typeof validator === 'function' && !validator(val)) {
-      throw new Error(`${key} param is invalid`)
-    }
-  }
-
-  return true
-}

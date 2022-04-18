@@ -2,8 +2,8 @@ import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import { run } from '../support/run.js'
 import { nftFixture as fixture } from '../support/fixtures.js'
-import { JigBox } from '../../src/tokens/box.js'
 import tokenkit from '../../src/index.js'
+import { JigBox } from '../../src/tokens/box.js'
 
 const NFT = tokenkit.nft
 
@@ -17,7 +17,7 @@ describe('NFT.create()', () => {
 
     assert.match(klass.toString(), /^class\s+/)
     assert.equal(klass.name, 'FooNFT')
-    assert.equal(klass.metadata.title, 'Foo bar')
+    assert.equal(klass.metadata.name, 'Foo bar')
     assert.doesNotHaveAnyKeys(klass, ['location', 'origin', 'nonce', 'owner', 'satoshis'])
   })
 
@@ -55,13 +55,13 @@ describe('NFT.create()', () => {
     assert.isUndefined(klass.foo)
   })
 
-  it('throws error when name is missing', () => {
-    assert.throws(() => {
-      NFT.create({
-        ...fixture,
-        name: undefined,
-      })
-    }, 'name param is invalid')
+  it('has a default class name', () => {
+    const klass = NFT.create({
+      ...fixture,
+      className: undefined,
+    })
+
+    assert.equal(klass.name, 'NFT')
   })
 
   it('throws error when metadata is missing', () => {
@@ -70,7 +70,7 @@ describe('NFT.create()', () => {
         ...fixture,
         metadata: undefined,
       })
-    }, 'metadata param is invalid')
+    }, /^'metadata' is invalid/)
   })
 
   it('throws error when maxSupply is invalid', () => {
@@ -79,7 +79,7 @@ describe('NFT.create()', () => {
         ...fixture,
         maxSupply: 'abc',
       })
-    }, 'maxSupply param is invalid')
+    }, /^'maxSupply' is invalid/)
   })
 })
 
@@ -179,11 +179,11 @@ describe('NFT.upgrade()', () => {
 
     const upgraded = await NFT.upgrade(klass.origin, {
       ...fixture,
-      metadata: { title: 'Foo bar 2' },
+      metadata: { name: 'Foo bar 2' },
       foo: 'baz'
     })
 
-    assert.equal(upgraded.metadata.title, 'Foo bar 2')
+    assert.equal(upgraded.metadata.name, 'Foo bar 2')
     assert.equal(upgraded.foo, 'baz')
   })
 
@@ -213,13 +213,13 @@ describe('NFT.upgrade()', () => {
 
     const newClass = await NFT.create({
       ...fixture,
-      metadata: { title: 'Foo bar 2' },
+      metadata: { name: 'Foo bar 2' },
       foo: 'baz',
     })
 
     const upgraded = await NFT.upgrade(klass.origin, newClass)
 
-    assert.equal(upgraded.metadata.title, 'Foo bar 2')
+    assert.equal(upgraded.metadata.name, 'Foo bar 2')
     assert.equal(upgraded.foo, 'baz')
   })
 

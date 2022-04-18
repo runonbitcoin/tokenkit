@@ -35,7 +35,7 @@ Fungible tokens
 ```js
 // Returns a class
 const MyCoin = tokenkit.ft.create({
-  name: 'MyCoin',
+  className: 'MyCoin',
   metadata: {
     name: 'My Coin',
     description: 'My example token',
@@ -61,7 +61,7 @@ Non-fungible tokens - almost identical api
 
 ```js
 const deployedCode = await tokenkit.ft.deploy({
-  name: 'MyNFT',
+  className: 'MyNFT',
   metadata: {
     name: 'My NFT',
     description: 'My example NFT',
@@ -127,7 +127,7 @@ For simple changes, for example to upgrade metadata...
 
 ```js
 const upgradedCode = tokenkit.nft.upgrade(origin, {
-  name: 'MyCoin',
+  className: 'MyCoin',
   metadata: {
     image: 'b://30dc4529b612dc76e35c9a54474ad56053c5a033d432f4152ce34c6aca2981ac',
     ...
@@ -150,7 +150,7 @@ If a class is created with `transferable: true`, it can be transferred to new ow
 
 ```js
 const MyCoin = await tokenkit.ft.deploy({
-  name: 'MyCoin',
+  className: 'MyCoin',
   transferable: true
 })
 
