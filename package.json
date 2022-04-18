@@ -37,5 +37,8 @@
   },
   "peerDependencies": {
     "run-sdk": "*"
-  }
+  },
+  "tsd": {
+		"directory": "test"
+	}
 }

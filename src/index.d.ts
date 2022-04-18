@@ -1,14 +1,14 @@
-type Class = { new(...args: any[]): any; };
-type RunCode = any;
-type RunJig = any;
-type RunLock = any;
-type RunInstance = any;
-type txid = string;
+export type Class = { new(...args: any[]): any; };
+export type RunCode = any;
+export type RunJig = any;
+export type RunLock = any;
+export type RunInstance = any;
+export type txid = string;
 
 type MintArgs = any | Array<any>;
 
 interface FTParams {
-  name: string;
+  className?: string;
   metadata: Partial<PresentationMetadata | LicenseMetadata>;
   symbol: string;
   decimals?: number;
@@ -19,7 +19,7 @@ interface FTParams {
 }
 
 interface NFTParams {
-  name: string;
+  className?: string;
   metadata: Partial<PresentationMetadata | LicenseMetadata>;
   maxSupply?: number;
   sealed?: boolean;
@@ -62,6 +62,7 @@ export class JigBox {
 
   send(owner: string | RunLock, amount: number): Promise<txid>;
   sendMany(recipients: [string | RunLock, number][]): Promise<txid>;
+  burn(amount: number): Promise<txid>;
   sync(): Promise<void>;
 }
 
@@ -80,3 +81,4 @@ export interface UtilInterface {
 export function init(run: RunInstance): void;
 export const ft: TokenInterface;
 export const nft: TokenInterface;
+export const util: UtilInterface;
