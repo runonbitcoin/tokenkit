@@ -5,15 +5,13 @@ import { nftFixture as fixture } from '../support/fixtures.js'
 import tokenkit from '../../src/index.js'
 import { JigBox } from '../../src/tokens/box.js'
 
-const NFT = tokenkit.nft
-
 chai.use(chaiAsPromised)
 tokenkit.init(run)
 
 
-describe('NFT.create()', () => {
+describe('tokenkit.nft.create()', () => {
   it('returns a class with valid parameters', () => {
-    const klass = NFT.create(fixture)
+    const klass = tokenkit.nft.create(fixture)
 
     assert.match(klass.toString(), /^class\s+/)
     assert.equal(klass.name, 'FooNFT')
@@ -22,14 +20,14 @@ describe('NFT.create()', () => {
   })
 
   it('returns a class with default static properties', () => {
-    const klass = NFT.create(fixture)
+    const klass = tokenkit.nft.create(fixture)
 
     assert.equal(klass.supply, 0)
     assert.equal(klass.version, '1.0')
   })
 
   it('accepts maxSupply number', () => {
-    const klass = NFT.create({
+    const klass = tokenkit.nft.create({
       ...fixture,
       maxSupply: 500,
     })
@@ -38,7 +36,7 @@ describe('NFT.create()', () => {
   })
 
   it('accepts arbitrary properties', () => {
-    const klass = NFT.create({
+    const klass = tokenkit.nft.create({
       ...fixture,
       foo: 'bar',
     })
@@ -47,7 +45,7 @@ describe('NFT.create()', () => {
   })
 
   it('ignores function properties', () => {
-    const klass = NFT.create({
+    const klass = tokenkit.nft.create({
       ...fixture,
       foo() { return 'bar' },
     })
@@ -56,7 +54,7 @@ describe('NFT.create()', () => {
   })
 
   it('has a default class name', () => {
-    const klass = NFT.create({
+    const klass = tokenkit.nft.create({
       ...fixture,
       className: undefined,
     })
@@ -66,7 +64,7 @@ describe('NFT.create()', () => {
 
   it('throws error when metadata is missing', () => {
     assert.throws(() => {
-      NFT.create({
+      tokenkit.nft.create({
         ...fixture,
         metadata: undefined,
       })
@@ -75,7 +73,7 @@ describe('NFT.create()', () => {
 
   it('throws error when maxSupply is invalid', () => {
     assert.throws(() => {
-      NFT.create({
+      tokenkit.nft.create({
         ...fixture,
         maxSupply: 'abc',
       })
@@ -84,9 +82,9 @@ describe('NFT.create()', () => {
 })
 
 
-describe('NFT.deploy()', () => {
+describe('tokenkit.nft.deploy()', () => {
   it('returns a deployed class with valid parameters', async () => {
-    const klass = await NFT.deploy(fixture)
+    const klass = await tokenkit.nft.deploy(fixture)
 
     assert.match(klass.toString(), /^class\s+/)
     assert.equal(klass.name, 'FooNFT')
@@ -94,8 +92,8 @@ describe('NFT.deploy()', () => {
   })
 
   it('accepts a class', async () => {
-    const klass = NFT.create(fixture)
-    const result = await NFT.deploy(klass)
+    const klass = tokenkit.nft.create(fixture)
+    const result = await tokenkit.nft.deploy(klass)
 
     assert.match(result.toString(), /^class\s+/)
     assert.equal(result.name, 'FooNFT')
@@ -103,16 +101,16 @@ describe('NFT.deploy()', () => {
   })
 
   it('throws error when params invalid', () => {
-    assert.throws(() => NFT.create({}))
+    assert.throws(() => tokenkit.nft.create({}))
   })
 })
 
 
-describe('NFT.mint()', () => {
+describe('tokenkit.nft.mint()', () => {
   it('returns a txid when given a list of owners', async () => {
-    const klass = await NFT.deploy(fixture)
+    const klass = await tokenkit.nft.deploy(fixture)
 
-    const txid = await NFT.mint(klass.origin, [
+    const txid = await tokenkit.nft.mint(klass.origin, [
       'mmcDhzEZuU1sb2usKzQt6vQCDsGzyx5tEQ',
       'mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN',
       'mgxGAWN13irNZi1B8LdHXc4E8scDaAVRUV',
@@ -123,9 +121,9 @@ describe('NFT.mint()', () => {
   })
 
   it('accepts an array of arrays for extra args', async () => {
-    const klass = await NFT.deploy(fixture)
+    const klass = await tokenkit.nft.deploy(fixture)
 
-    const txid = await NFT.mint(klass.origin, [
+    const txid = await tokenkit.nft.mint(klass.origin, [
       ['mmcDhzEZuU1sb2usKzQt6vQCDsGzyx5tEQ'],
       ['mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN'],
       ['mgxGAWN13irNZi1B8LdHXc4E8scDaAVRUV'],
@@ -136,9 +134,9 @@ describe('NFT.mint()', () => {
   })
 
   it('updates the class supply', async () => {
-    const klass = await NFT.deploy(fixture)
+    const klass = await tokenkit.nft.deploy(fixture)
 
-    await NFT.mint(klass.origin, [
+    await tokenkit.nft.mint(klass.origin, [
       'mmcDhzEZuU1sb2usKzQt6vQCDsGzyx5tEQ',
       'mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN',
       'mgxGAWN13irNZi1B8LdHXc4E8scDaAVRUV',
@@ -149,12 +147,12 @@ describe('NFT.mint()', () => {
   })
 
   it('throws error if max supply is exceeded', async () => {
-    const klass = await NFT.deploy({
+    const klass = await tokenkit.nft.deploy({
       ...fixture,
       maxSupply: 2,
     })
 
-    const promise = NFT.mint(klass.origin, [
+    const promise = tokenkit.nft.mint(klass.origin, [
       'mmcDhzEZuU1sb2usKzQt6vQCDsGzyx5tEQ',
       'mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN',
       'mgxGAWN13irNZi1B8LdHXc4E8scDaAVRUV',
@@ -164,20 +162,20 @@ describe('NFT.mint()', () => {
   })
 
   it('throws error when invalid recipients', async () => {
-    const klass = await NFT.deploy(fixture)
-    await assert.isRejected(NFT.mint(klass.origin), /^Invalid recipients/)
+    const klass = await tokenkit.nft.deploy(fixture)
+    await assert.isRejected(tokenkit.nft.mint(klass.origin), /^Invalid recipients/)
   })
 })
 
 
-describe('NFT.upgrade()', () => {
+describe('tokenkit.nft.upgrade()', () => {
   it('returns the upgraded class with valid parameters', async () => {
-    const klass = await NFT.deploy({
+    const klass = await tokenkit.nft.deploy({
       ...fixture,
       foo: 'bar',
     })
 
-    const upgraded = await NFT.upgrade(klass.origin, {
+    const upgraded = await tokenkit.nft.upgrade(klass.origin, {
       ...fixture,
       metadata: { name: 'Foo bar 2' },
       foo: 'baz'
@@ -188,12 +186,12 @@ describe('NFT.upgrade()', () => {
   })
 
   it('wont change protected state', async () => {
-    const klass = await NFT.deploy({
+    const klass = await tokenkit.nft.deploy({
       ...fixture,
       maxSupply: 1000,
     })
 
-    const upgraded = await NFT.upgrade(klass.origin, {
+    const upgraded = await tokenkit.nft.upgrade(klass.origin, {
       ...fixture,
       maxSupply: 2000,
       supply: 200,
@@ -206,48 +204,48 @@ describe('NFT.upgrade()', () => {
   })
 
   it('accepts an already created class', async () => {
-    const klass = await NFT.deploy({
+    const klass = await tokenkit.nft.deploy({
       ...fixture,
       foo: 'bar',
     })
 
-    const newClass = await NFT.create({
+    const newClass = await tokenkit.nft.create({
       ...fixture,
       metadata: { name: 'Foo bar 2' },
       foo: 'baz',
     })
 
-    const upgraded = await NFT.upgrade(klass.origin, newClass)
+    const upgraded = await tokenkit.nft.upgrade(klass.origin, newClass)
 
     assert.equal(upgraded.metadata.name, 'Foo bar 2')
     assert.equal(upgraded.foo, 'baz')
   })
 
   it('wont upgrade if upgradable is false', async () => {
-    const klass = await NFT.deploy({
+    const klass = await tokenkit.nft.deploy({
       ...fixture,
       foo: 'bar',
       upgradable: false,
     })
 
-    const promise = NFT.upgrade(klass.origin, {
+    const promise = tokenkit.nft.upgrade(klass.origin, {
       ...fixture,
       foo: 'baz',
     })
 
-    assert.isRejected(promise, /is non-upgradable/)
+    await assert.isRejected(promise, /is non-upgradable/)
   })
 })
 
 
 describe('transferable: true', () => {
   it('class is not transferable by default', async () => {
-    const klass = await NFT.deploy(fixture)
+    const klass = await tokenkit.nft.deploy(fixture)
     assert.isUndefined(klass.transfer)
   })
 
   it('class is transferable if option specified', async () => {
-    const klass = await NFT.deploy({
+    const klass = await tokenkit.nft.deploy({
       ...fixture,
       transferable: true
     })
@@ -260,10 +258,10 @@ describe('transferable: true', () => {
 })
 
 
-describe('NFT.getJigBox()', () => {
+describe('tokenkit.nft.getJigBox()', () => {
   it('returns the RUN owners JigBox for the given origin', async () => {
-    const klass = await NFT.deploy(fixture)
-    const box = await NFT.getJigBox(klass.origin)
+    const klass = await tokenkit.nft.deploy(fixture)
+    const box = await tokenkit.nft.getJigBox(klass.origin)
     assert.instanceOf(box, JigBox)
     assert.equal(box.type, 'NFT')
   })

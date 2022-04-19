@@ -1,6 +1,7 @@
 import Run from 'run-sdk'
 import { JigBox } from './box.js'
 import {
+  applyRelayRequirements,
   applyStaticProps,
   createClass,
   deployClass,
@@ -57,8 +58,9 @@ const schema = {
   klass.symbol = symbol
   klass.decimals = decimals
 
-  // Attach arbitrary static props
+  // Attach arbitrary static props & relay requirements
   applyStaticProps(klass, props)
+  applyRelayRequirements(klass)
 
   return klass
 }

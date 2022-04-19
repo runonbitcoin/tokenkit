@@ -38,7 +38,7 @@ export function validateNumber({ allowBlank, integer, min, max, message } = {}) 
  * @param {number} opts.message Error message
  * @returns {object}
  */
- export function validateObject({ allowBlank, schema, message } = {}) {
+ export function validateObject({ allowBlank, assert, schema, message } = {}) {
   return {
     message: message || 'must be a number',
     
@@ -46,6 +46,7 @@ export function validateNumber({ allowBlank, integer, min, max, message } = {}) 
       if (allowBlank && !val)                           return true;
       if (typeof val !== 'object')                      return false;
       if (schema && !validateParams(val, schema))       return false;
+      if (typeof assert === 'function' && !assert(val)) return false;
       return true;
     }
   }
@@ -86,7 +87,7 @@ export function validateString({ allowBlank, matches, min, max, message } = {}) 
  */
  export function validateParams(params, schema) {
   if (typeof params !== 'object') {
-    throw new Error(`invalid params`)
+    throw new Error('invalid params')
   }
 
   for (const key of Object.keys(schema)) {

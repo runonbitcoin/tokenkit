@@ -5,15 +5,13 @@ import { ftFixture as fixture } from '../support/fixtures.js'
 import tokenkit from '../../src/index.js'
 import { JigBox } from '../../src/tokens/box.js'
 
-const FT = tokenkit.ft
-
 chai.use(chaiAsPromised)
 tokenkit.init(run)
 
 
-describe('FT.create()', () => {
+describe('tokenkit.ft.create()', () => {
   it('returns a class with valid parameters', () => {
-    const klass = FT.create(fixture)
+    const klass = tokenkit.ft.create(fixture)
 
     assert.match(klass.toString(), /^class\s+/)
     assert.equal(klass.name, 'FooCoin')
@@ -23,7 +21,7 @@ describe('FT.create()', () => {
   })
 
   it('returns a class with default static properties', () => {
-    const klass = FT.create(fixture)
+    const klass = tokenkit.ft.create(fixture)
 
     assert.equal(klass.decimals, 0)
     assert.equal(klass.supply, 0)
@@ -31,7 +29,7 @@ describe('FT.create()', () => {
   })
 
   it('accepts decimals number', () => {
-    const klass = FT.create({
+    const klass = tokenkit.ft.create({
       ...fixture,
       decimals: 8,
     })
@@ -40,7 +38,7 @@ describe('FT.create()', () => {
   })
 
   it('accepts arbitrary properties', () => {
-    const klass = FT.create({
+    const klass = tokenkit.ft.create({
       ...fixture,
       foo: 'bar',
     })
@@ -49,7 +47,7 @@ describe('FT.create()', () => {
   })
 
   it('ignores function properties', () => {
-    const klass = FT.create({
+    const klass = tokenkit.ft.create({
       ...fixture,
       foo() { return 'bar' },
     })
@@ -58,7 +56,7 @@ describe('FT.create()', () => {
   })
 
   it('has a default class name', () => {
-    const klass = FT.create({
+    const klass = tokenkit.ft.create({
       ...fixture,
       className: undefined,
     })
@@ -68,7 +66,7 @@ describe('FT.create()', () => {
 
   it('throws error when metadata is missing', () => {
     assert.throws(() => {
-      FT.create({
+      tokenkit.ft.create({
         ...fixture,
         metadata: undefined,
       })
@@ -77,7 +75,7 @@ describe('FT.create()', () => {
 
   it('throws error when symbol is missing', () => {
     assert.throws(() => {
-      FT.create({
+      tokenkit.ft.create({
         ...fixture,
         symbol: undefined,
       })
@@ -86,7 +84,7 @@ describe('FT.create()', () => {
 
   it('throws error when decimals is invalid', () => {
     assert.throws(() => {
-      FT.create({
+      tokenkit.ft.create({
         ...fixture,
         decimals: -23,
       })
@@ -95,9 +93,9 @@ describe('FT.create()', () => {
 })
 
 
-describe('FT.deploy()', () => {
+describe('tokenkit.ft.deploy()', () => {
   it('returns a deployed class with valid parameters', async () => {
-    const klass = await FT.deploy(fixture)
+    const klass = await tokenkit.ft.deploy(fixture)
 
     assert.match(klass.toString(), /^class\s+/)
     assert.equal(klass.name, 'FooCoin')
@@ -105,8 +103,8 @@ describe('FT.deploy()', () => {
   })
 
   it('accepts a class', async () => {
-    const klass = FT.create(fixture)
-    const result = await FT.deploy(klass)
+    const klass = tokenkit.ft.create(fixture)
+    const result = await tokenkit.ft.deploy(klass)
 
     assert.match(result.toString(), /^class\s+/)
     assert.equal(result.name, 'FooCoin')
@@ -114,16 +112,16 @@ describe('FT.deploy()', () => {
   })
 
   it('throws error when params invalid', () => {
-    assert.throws(() => FT.create({}))
+    assert.throws(() => tokenkit.ft.create({}))
   })
 })
 
 
-describe('FT.mint()', () => {
+describe('tokenkit.ft.mint()', () => {
   it('returns a txid when given a list of owners and amounts', async () => {
-    const klass = await FT.deploy(fixture)
+    const klass = await tokenkit.ft.deploy(fixture)
 
-    const txid = await FT.mint(klass.origin, [
+    const txid = await tokenkit.ft.mint(klass.origin, [
       [5000, 'mmcDhzEZuU1sb2usKzQt6vQCDsGzyx5tEQ'],
       [1000, 'mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN'],
       [3000, 'mgxGAWN13irNZi1B8LdHXc4E8scDaAVRUV'],
@@ -134,9 +132,9 @@ describe('FT.mint()', () => {
   })
 
   it('updates the class supply', async () => {
-    const klass = await FT.deploy(fixture)
+    const klass = await tokenkit.ft.deploy(fixture)
 
-    await FT.mint(klass.origin, [
+    await tokenkit.ft.mint(klass.origin, [
       [5000, 'mmcDhzEZuU1sb2usKzQt6vQCDsGzyx5tEQ'],
       [1000, 'mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN'],
       [3000, 'mgxGAWN13irNZi1B8LdHXc4E8scDaAVRUV'],
@@ -147,11 +145,11 @@ describe('FT.mint()', () => {
   })
 
   it('throws error when invalid recipients', async () => {
-    const klass = await FT.deploy(fixture)
+    const klass = await tokenkit.ft.deploy(fixture)
 
-    await assert.isRejected(FT.mint(klass.origin), /^Invalid recipients/)
+    await assert.isRejected(tokenkit.ft.mint(klass.origin), /^Invalid recipients/)
 
-    await assert.isRejected(FT.mint(klass.origin, [
+    await assert.isRejected(tokenkit.ft.mint(klass.origin, [
       'mmcDhzEZuU1sb2usKzQt6vQCDsGzyx5tEQ',
       'mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN',
     ]), /^amount is not a number/)
@@ -159,14 +157,14 @@ describe('FT.mint()', () => {
 })
 
 
-describe('FT.upgrade()', () => {
+describe('tokenkit.ft.upgrade()', () => {
   it('returns the upgraded class with valid parameters', async () => {
-    const klass = await FT.deploy({
+    const klass = await tokenkit.ft.deploy({
       ...fixture,
       foo: 'bar',
     })
 
-    const upgraded = await FT.upgrade(klass.origin, {
+    const upgraded = await tokenkit.ft.upgrade(klass.origin, {
       ...fixture,
       metadata: { name: 'Foo Coin 2' },
       foo: 'baz',
@@ -177,12 +175,12 @@ describe('FT.upgrade()', () => {
   })
 
   it('wont change protected state', async () => {
-    const klass = await FT.deploy({
+    const klass = await tokenkit.ft.deploy({
       ...fixture,
       supply: 100,
     })
 
-    const upgraded = await FT.upgrade(klass.origin, {
+    const upgraded = await tokenkit.ft.upgrade(klass.origin, {
       ...fixture,
       supply: 200,
     })
@@ -192,48 +190,48 @@ describe('FT.upgrade()', () => {
   })
 
   it('accepts an already created class', async () => {
-    const klass = await FT.deploy({
+    const klass = await tokenkit.ft.deploy({
       ...fixture,
       foo: 'bar'
     })
 
-    const newClass = await FT.create({
+    const newClass = await tokenkit.ft.create({
       ...fixture,
       metadata: { name: 'Foo Coin 2' },
       foo: 'baz',
     })
 
-    const upgraded = await FT.upgrade(klass.origin, newClass)
+    const upgraded = await tokenkit.ft.upgrade(klass.origin, newClass)
 
     assert.equal(upgraded.metadata.name, 'Foo Coin 2')
     assert.equal(upgraded.foo, 'baz')
   })
 
   it('wont upgrade if upgradable is false', async () => {
-    const klass = await FT.deploy({
+    const klass = await tokenkit.ft.deploy({
       ...fixture,
       foo: 'bar',
       upgradable: false,
     })
 
-    const promise = FT.upgrade(klass.origin, {
+    const promise = tokenkit.ft.upgrade(klass.origin, {
       ...fixture,
       foo: 'baz',
     })
 
-    assert.isRejected(promise, /is non-upgradable/)
+    await assert.isRejected(promise, /is non-upgradable/)
   })
 })
 
 
 describe('transferable: true', () => {
   it('class is not transferable by default', async () => {
-    const klass = await FT.deploy(fixture)
+    const klass = await tokenkit.ft.deploy(fixture)
     assert.isUndefined(klass.transfer)
   })
 
   it('class is transferable if option specified', async () => {
-    const klass = await FT.deploy({
+    const klass = await tokenkit.ft.deploy({
       ...fixture,
       transferable: true
     })
@@ -246,10 +244,10 @@ describe('transferable: true', () => {
 })
 
 
-describe('FT.getJigBox()', () => {
+describe('tokenkit.ft.getJigBox()', () => {
   it('returns the RUN owners JigBox for the given origin', async () => {
-    const klass = await FT.deploy(fixture)
-    const box = await FT.getJigBox(klass.origin)
+    const klass = await tokenkit.ft.deploy(fixture)
+    const box = await tokenkit.ft.getJigBox(klass.origin)
     assert.instanceOf(box, JigBox)
     assert.equal(box.type, 'FT')
   })

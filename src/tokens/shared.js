@@ -1,5 +1,22 @@
 import Run from 'run-sdk'
 import $ from '../state.js'
+import { OrderLock } from './order-lock-class.js'
+
+/**
+ * Applies default properties to the class on order to be compatible with the
+ * relay DEX.
+ * 
+ * @param {class} klass Target class
+ */
+export function applyRelayRequirements(klass) {
+  klass.interactive = false
+
+  // Add friends array unless already defiend
+  if (!Array.isArray(klass.friends)) {
+    klass.friends = []
+  }
+  klass.friends.push(OrderLock)
+}
 
 /**
  * Iterates over the given props and attaches them to the class as static properties.
@@ -8,7 +25,7 @@ import $ from '../state.js'
  * @param {class} klass Target class
  * @param {object} props Propeties
  */
-export function applyStaticProps(klass, props) {
+ export function applyStaticProps(klass, props) {
   Object.keys(props)
     .filter(key => typeof props[key] !== 'function')
     .forEach(key => {

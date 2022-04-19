@@ -86,8 +86,7 @@ export class JigBox {
 
     const tx = new Run.Transaction()
     if (this.jigs.length > 1) {
-      const jigs = this.jigs.slice(1)
-      tx.update(() => this.jigs[0].combine(...jigs))
+      tx.update(() => this.jigs[0].combine(...this.jigs.slice(1)))
     }
     tx.update(() => this.jigs[0].send(owner, amount))
     const txid = await tx.publish()

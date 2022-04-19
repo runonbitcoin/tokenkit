@@ -86,10 +86,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@runonbitcoin/nimble@npm:^1.0.7":
+  version: 1.0.7
+  resolution: "@runonbitcoin/nimble@npm:1.0.7"
+  checksum: 4b69fde4474e91bca62849f0d7c566501ad776003a432fc73f6039cb09619ac104db03eea2978aa3482314b6e4b979e3badb328b9eda11eace66c47031971825
+  languageName: node
+  linkType: hard
+
 "@runonbitcoin/tokenkit@workspace:.":
   version: 0.0.0-use.local
   resolution: "@runonbitcoin/tokenkit@workspace:."
   dependencies:
+    "@runonbitcoin/nimble": ^1.0.7
     chai: ^4.3.6
     chai-as-promised: ^7.1.1
     esbuild: ^0.14.34

@@ -4,6 +4,7 @@ import tokenkit, {
   RunCode,
   JigBox,
   TokenInterface,
+  DexInterface,
   UtilInterface,
 } from '../src'
 
@@ -11,6 +12,7 @@ import tokenkit, {
 expectType<void>( tokenkit.init('Fake Run') )
 expectType<TokenInterface>( tokenkit.ft )
 expectType<TokenInterface>( tokenkit.nft )
+expectType<DexInterface>( tokenkit.dex )
 expectType<UtilInterface>( tokenkit.util )
 
 // Token interface

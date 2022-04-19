@@ -39,6 +39,9 @@
     "run-sdk": "*"
   },
   "tsd": {
-		"directory": "test"
-	}
+    "directory": "test"
+  },
+  "dependencies": {
+    "@runonbitcoin/nimble": "^1.0.7"
+  }
 }

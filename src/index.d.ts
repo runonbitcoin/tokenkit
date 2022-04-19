@@ -49,6 +49,14 @@ interface LicenseMetadata {
 
 type MediaReference = any;
 
+interface OfferParams {
+  jig?: RunJig;
+  jigbox?: JigBox;
+  amount?: number;
+  address: string;
+  satoshis: number;
+}
+
 export class JigBox {
   contract: RunCode;
   jigs: RunJig[];
@@ -74,6 +82,10 @@ export interface TokenInterface {
   getJigBox(origin: string): Promise<JigBox>;
 }
 
+export interface DexInterface {
+  createOffer(params: OfferParams): Promise<RunJig>
+}
+
 export interface UtilInterface {
   upgradeClass(origin: string, newClass: Class, updated?: string[]): Promise<RunCode>
 }
@@ -81,4 +93,5 @@ export interface UtilInterface {
 export function init(run: RunInstance): void;
 export const ft: TokenInterface;
 export const nft: TokenInterface;
+export const dex: DexInterface;
 export const util: UtilInterface;

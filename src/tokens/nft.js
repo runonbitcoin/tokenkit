@@ -1,6 +1,7 @@
 import { NFT } from './nft-class.js'
 import { JigBox } from './box.js'
 import {
+  applyRelayRequirements,
   applyStaticProps,
   createClass,
   deployClass,
@@ -53,8 +54,9 @@ export function create(params) {
   klass.total = 0
   if (maxSupply) klass.maxSupply = maxSupply
 
-  // Attach arbitrary static props
+  // Attach arbitrary static props & relay requirements
   applyStaticProps(klass, props)
+  applyRelayRequirements(klass)
 
   return klass
 }

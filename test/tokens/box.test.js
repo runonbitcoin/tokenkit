@@ -5,9 +5,6 @@ import { ftFixture, nftFixture } from '../support/fixtures.js'
 import tokenkit from '../../src/index.js'
 import { JigBox } from '../../src/tokens/box.js'
 
-const FT = tokenkit.ft
-const NFT = tokenkit.nft
-
 chai.use(chaiAsPromised)
 tokenkit.init(run)
 
@@ -15,7 +12,7 @@ tokenkit.init(run)
 describe('JigBox', () => {
   let klass 
   before(async () => {
-    klass = await FT.deploy(ftFixture)
+    klass = await tokenkit.ft.deploy(ftFixture)
   })
 
   it('new JigBox() instantiates a new box', () => {
@@ -46,38 +43,38 @@ describe('JigBox', () => {
 
 describe('JigBox#balance and JigBox#balanceAsDecimal', () => {
   it('returns the sum of all jigs', async () => {
-    const klass = await FT.deploy(ftFixture)
-    await FT.mint(klass.origin, [
+    const klass = await tokenkit.ft.deploy(ftFixture)
+    await tokenkit.ft.mint(klass.origin, [
       [5000, run.owner.address],
       [1000, run.owner.address],
       [3000, run.owner.address],
     ])
 
-    const box = await FT.getJigBox(klass.origin)
+    const box = await tokenkit.ft.getJigBox(klass.origin)
     assert.equal(box.balance, 9000)
     assert.equal(box.balanceAsDecimal, '9000')
   })
 
   it('correctly handles decimals', async () => {
-    const klass = await FT.deploy({
+    const klass = await tokenkit.ft.deploy({
       ...ftFixture,
       decimals: 2
     })
-    await FT.mint(klass.origin, [
+    await tokenkit.ft.mint(klass.origin, [
       [5020, run.owner.address],
       [1001, run.owner.address],
       [3048, run.owner.address],
     ])
     
-    const box = await FT.getJigBox(klass.origin)
+    const box = await tokenkit.ft.getJigBox(klass.origin)
     assert.equal(box.balance, 9069)
     assert.equal(box.balanceAsDecimal, '90.69')
   })
 
   it('throws an error with NFT boxes', async () => {
-    const klass = await NFT.deploy(nftFixture)
+    const klass = await tokenkit.nft.deploy(nftFixture)
 
-    const box = await NFT.getJigBox(klass.origin)
+    const box = await tokenkit.nft.getJigBox(klass.origin)
     assert.throws(() => box.balance, /^Method unavailable/)
   })
 })
@@ -85,14 +82,14 @@ describe('JigBox#balance and JigBox#balanceAsDecimal', () => {
 
 describe('JigBox#jigs', () => {
   it('returns an array of jigs', async () => {
-    const klass = await FT.deploy(ftFixture)
-    await FT.mint(klass.origin, [
+    const klass = await tokenkit.ft.deploy(ftFixture)
+    await tokenkit.ft.mint(klass.origin, [
       [5000, run.owner.address],
       [1000, run.owner.address],
       [3000, run.owner.address],
     ])
 
-    const box = await FT.getJigBox(klass.origin)
+    const box = await tokenkit.ft.getJigBox(klass.origin)
     assert.isArray(box.jigs)
     assert.lengthOf(box.jigs, 3)
   })
@@ -102,14 +99,14 @@ describe('JigBox#jigs', () => {
 describe('JigBox#send()', () => {
   let box
   beforeEach(async () => {
-    const klass = await FT.deploy(ftFixture)
-    await FT.mint(klass.origin, [
+    const klass = await tokenkit.ft.deploy(ftFixture)
+    await tokenkit.ft.mint(klass.origin, [
       [5000, run.owner.address],
       [1000, run.owner.address],
       [3000, run.owner.address],
     ])
 
-    box = await FT.getJigBox(klass.origin)
+    box = await tokenkit.ft.getJigBox(klass.origin)
   })
 
   it('sends tokens to the recipient', async () => {
@@ -128,8 +125,8 @@ describe('JigBox#send()', () => {
   })
 
   it('throws an error with NFT boxes', async () => {
-    const klass = await NFT.deploy(nftFixture)
-    const box = await NFT.getJigBox(klass.origin)
+    const klass = await tokenkit.nft.deploy(nftFixture)
+    const box = await tokenkit.nft.getJigBox(klass.origin)
     const promise = box.send('mgxGAWN13irNZi1B8LdHXc4E8scDaAVRUV', 5000)
     await assert.isRejected(promise, /^Method unavailable/)
   })
@@ -139,14 +136,14 @@ describe('JigBox#send()', () => {
 describe('JigBox#sendMany()', () => {
   let box
   beforeEach(async () => {
-    const klass = await FT.deploy(ftFixture)
-    await FT.mint(klass.origin, [
+    const klass = await tokenkit.ft.deploy(ftFixture)
+    await tokenkit.ft.mint(klass.origin, [
       [5000, run.owner.address],
       [1000, run.owner.address],
       [3000, run.owner.address],
     ])
 
-    box = await FT.getJigBox(klass.origin)
+    box = await tokenkit.ft.getJigBox(klass.origin)
   })
 
   it('sends tokens to multiple recipients', async () => {
@@ -171,8 +168,8 @@ describe('JigBox#sendMany()', () => {
   })
 
   it('throws an error with NFT boxes', async () => {
-    const klass = await NFT.deploy(nftFixture)
-    const box = await NFT.getJigBox(klass.origin)
+    const klass = await tokenkit.nft.deploy(nftFixture)
+    const box = await tokenkit.nft.getJigBox(klass.origin)
     const promise = box.sendMany([
       ['mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN', 3600],
       ['mgxGAWN13irNZi1B8LdHXc4E8scDaAVRUV', 2600],
@@ -185,14 +182,14 @@ describe('JigBox#sendMany()', () => {
 describe('JigBox#burn()', () => {
   let box
   beforeEach(async () => {
-    const klass = await FT.deploy(ftFixture)
-    await FT.mint(klass.origin, [
+    const klass = await tokenkit.ft.deploy(ftFixture)
+    await tokenkit.ft.mint(klass.origin, [
       [5000, run.owner.address],
       [1000, run.owner.address],
       [3000, run.owner.address],
     ])
 
-    box = await FT.getJigBox(klass.origin)
+    box = await tokenkit.ft.getJigBox(klass.origin)
   })
 
   it('burns amount of tokens', async () => {
@@ -211,8 +208,8 @@ describe('JigBox#burn()', () => {
   })
 
   it('throws an error with NFT boxes', async () => {
-    const klass = await NFT.deploy(nftFixture)
-    const box = await NFT.getJigBox(klass.origin)
+    const klass = await tokenkit.nft.deploy(nftFixture)
+    const box = await tokenkit.nft.getJigBox(klass.origin)
     const promise = box.burn(4500)
     await assert.isRejected(promise, /^Method unavailable/)
   })
@@ -221,12 +218,12 @@ describe('JigBox#burn()', () => {
 
 describe('JigBox#sync()', () => {
   it('refreshes the JigBox inventory', async () => {
-    const klass = await FT.deploy(ftFixture)
-    const box = await FT.getJigBox(klass.origin)
+    const klass = await tokenkit.ft.deploy(ftFixture)
+    const box = await tokenkit.ft.getJigBox(klass.origin)
 
     assert.lengthOf(box.jigs, 0)
 
-    await FT.mint(klass.origin, [
+    await tokenkit.ft.mint(klass.origin, [
       [5000, run.owner.address],
       [1000, run.owner.address],
       [3000, run.owner.address],
