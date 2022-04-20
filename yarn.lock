@@ -104,7 +104,7 @@ __metadata:
     esbuild-plugin-globals: ^0.1.1
     esm: ^3.2.25
     mocha: ^9.2.2
-    run-sdk: ^0.6.35
+    run-sdk: "file:///Users/aaron/Dev/run/run"
     tsd: ^0.20.0
   peerDependencies:
     run-sdk: "*"
@@ -2236,12 +2236,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"run-sdk@npm:^0.6.35":
+"run-sdk@file:///Users/aaron/Dev/run/run::locator=%40runonbitcoin%2Ftokenkit%40workspace%3A.":
   version: 0.6.35
-  resolution: "run-sdk@npm:0.6.35"
+  resolution: "run-sdk@file:///Users/aaron/Dev/run/run#///Users/aaron/Dev/run/run::hash=50e5e2&locator=%40runonbitcoin%2Ftokenkit%40workspace%3A."
   dependencies:
     bsv: ^1.5.6
-  checksum: 17941c74293f35b3eeb9f20df81ce7f3519a404f0e306573f24d356cbe430176f56ef19514014ce193328f5a57ea0ac4319b3449751f8998e156b4838292229a
+  checksum: adcbab7447fa629359097405ddf52539a3789a311be22079e35ade7b2d925b049a6fd47dc2d6af717baea08a6a4de7ae6fa4b5a7d1d3bb584edb3ae4d01f5b53
   languageName: node
   linkType: hard
 

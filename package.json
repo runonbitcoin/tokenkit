@@ -25,6 +25,9 @@
     "test:mjs": "yarn build && env LIB=dist/tokenkit.mjs mocha test/tokens/nft.test.js -g 'accepts a class'",
     "test:types": "tsd"
   },
+  "dependencies": {
+    "@runonbitcoin/nimble": "^1.0.7"
+  },
   "devDependencies": {
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
@@ -32,7 +35,7 @@
     "esbuild-plugin-globals": "^0.1.1",
     "esm": "^3.2.25",
     "mocha": "^9.2.2",
-    "run-sdk": "^0.6.35",
+    "run-sdk": "file:///Users/aaron/Dev/run/run",
     "tsd": "^0.20.0"
   },
   "peerDependencies": {
@@ -40,8 +43,5 @@
   },
   "tsd": {
     "directory": "test"
-  },
-  "dependencies": {
-    "@runonbitcoin/nimble": "^1.0.7"
   }
 }

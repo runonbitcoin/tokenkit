@@ -1,4 +1,4 @@
-import { NFT } from './nft-class.js'
+import Run from 'run-sdk'
 import { JigBox } from './box.js'
 import {
   applyRelayRequirements,
@@ -45,7 +45,7 @@ export function create(params) {
   } = validateParams(params, schema)
 
   // Dynamically create class from base
-  const klass = createClass(className, NFT, transferable)
+  const klass = createClass(className, Run.extra.NFT, transferable)
 
   // Set static props
   klass.metadata = metadata
