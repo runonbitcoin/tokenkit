@@ -9,14 +9,13 @@ import tokenkit, {
 } from '../src'
 
 // Default interface
-expectType<void>( tokenkit.init('Fake Run') )
 expectType<TokenInterface>( tokenkit.ft )
 expectType<TokenInterface>( tokenkit.nft )
 expectType<DexInterface>( tokenkit.dex )
 expectType<UtilInterface>( tokenkit.util )
 
 // Token interface
-const ftClass = tokenkit.ft.create({
+const ftClass = await tokenkit.ft.create({
   metadata: { name: 'My Coin' },
   symbol: 'USDT'
 })

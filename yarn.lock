@@ -86,10 +86,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@runonbitcoin/nimble@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "@runonbitcoin/nimble@npm:1.0.7"
-  checksum: 4b69fde4474e91bca62849f0d7c566501ad776003a432fc73f6039cb09619ac104db03eea2978aa3482314b6e4b979e3badb328b9eda11eace66c47031971825
+"@runonbitcoin/nimble@file:///Users/aaron/Dev/run/nimble::locator=%40runonbitcoin%2Ftokenkit%40workspace%3A.":
+  version: 1.0.10
+  resolution: "@runonbitcoin/nimble@file:///Users/aaron/Dev/run/nimble#///Users/aaron/Dev/run/nimble::hash=5c4c31&locator=%40runonbitcoin%2Ftokenkit%40workspace%3A."
+  checksum: b3a98a0e64f9b6d53d6c999dba1962409b0d8617d5b1328e40d251cf8de041a725594397cd85ec84b9dadbcb95923e61d7c01b762b8c001cfa3716682a03ba64
   languageName: node
   linkType: hard
 
@@ -97,7 +97,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@runonbitcoin/tokenkit@workspace:."
   dependencies:
-    "@runonbitcoin/nimble": ^1.0.7
+    "@runonbitcoin/nimble": "file:///Users/aaron/Dev/run/nimble"
     chai: ^4.3.6
     chai-as-promised: ^7.1.1
     esbuild: ^0.14.34
@@ -2238,10 +2238,10 @@ __metadata:
 
 "run-sdk@file:///Users/aaron/Dev/run/run::locator=%40runonbitcoin%2Ftokenkit%40workspace%3A.":
   version: 0.6.35
-  resolution: "run-sdk@file:///Users/aaron/Dev/run/run#///Users/aaron/Dev/run/run::hash=50e5e2&locator=%40runonbitcoin%2Ftokenkit%40workspace%3A."
+  resolution: "run-sdk@file:///Users/aaron/Dev/run/run#///Users/aaron/Dev/run/run::hash=1542d9&locator=%40runonbitcoin%2Ftokenkit%40workspace%3A."
   dependencies:
     bsv: ^1.5.6
-  checksum: adcbab7447fa629359097405ddf52539a3789a311be22079e35ade7b2d925b049a6fd47dc2d6af717baea08a6a4de7ae6fa4b5a7d1d3bb584edb3ae4d01f5b53
+  checksum: 8f09876894f87d294124c5439bd797f34b3a3afa2b2755751236cd3f82d9e4fbccc2c1f1ca1d457738d472b5fe42a86ccdd853e622943a5453596c0432ba4771
   languageName: node
   linkType: hard
 

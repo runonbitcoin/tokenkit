@@ -1,5 +1,5 @@
 import Run from 'run-sdk'
-import $ from '../state.js'
+import $ from '../run.js'
 
 /**
  * JigBox class.

@@ -75,7 +75,7 @@ export class JigBox {
 }
 
 export interface TokenInterface {
-  create(params: FTParams | NFTParams): Class;
+  create(params: FTParams | NFTParams): Promise<Class>;
   deploy(params: FTParams | NFTParams | Class): Promise<RunCode>;
   upgrade(origin: string, params: FTParams | NFTParams | Class): Promise<RunCode>;
   mint(origin: string, recipients: MintArgs[]): Promise<txid>;
@@ -83,14 +83,16 @@ export interface TokenInterface {
 }
 
 export interface DexInterface {
-  createOffer(params: OfferParams): Promise<RunJig>
+  createOffer(params: OfferParams): Promise<RunJig>;
+  listOffers(origin: string): Promise<RunJig[]>;
+  takeOffer(location: string): Promise<txid>;
+  cancelOffer(location: string): Promise<txid>;
 }
 
 export interface UtilInterface {
   upgradeClass(origin: string, newClass: Class, updated?: string[]): Promise<RunCode>
 }
 
-export function init(run: RunInstance): void;
 export const ft: TokenInterface;
 export const nft: TokenInterface;
 export const dex: DexInterface;

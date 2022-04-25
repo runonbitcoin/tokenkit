@@ -32,10 +32,11 @@ const schema = {
 /**
  * Dynamically creates a Class extending from Run.extra.NFT.
  * 
+ * @async
  * @param {object} params Token parameters
  * @returns {class}
  */
-export function create(params) {
+export async function create(params) {
   const {
     className,
     metadata,
@@ -72,7 +73,7 @@ export function create(params) {
 export async function deploy(params) {
   const klass = /^class\s+/.test(params.toString()) ?
     params :
-    create(params);
+    await create(params);
 
   return deployClass(klass)
 }
@@ -88,7 +89,7 @@ export async function deploy(params) {
 export async function upgrade(origin, params) {
   const klass = /^class\s+/.test(params.toString()) ?
     params :
-    create(params);
+    await create(params);
 
   // Build list of updated keys, except protected
   const updated = Object.keys(klass)

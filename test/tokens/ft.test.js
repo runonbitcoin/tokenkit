@@ -1,17 +1,16 @@
 import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import { run } from '../support/run.js'
 import { ftFixture as fixture } from '../support/fixtures.js'
 import tokenkit from '../../src/index.js'
 import { JigBox } from '../../src/tokens/box.js'
+import '../support/run.js'
 
 chai.use(chaiAsPromised)
-tokenkit.init(run)
 
 
 describe('tokenkit.ft.create()', () => {
-  it('returns a class with valid parameters', () => {
-    const klass = tokenkit.ft.create(fixture)
+  it('returns a class with valid parameters', async () => {
+    const klass = await tokenkit.ft.create(fixture)
 
     assert.match(klass.toString(), /^class\s+/)
     assert.equal(klass.name, 'FooCoin')
@@ -20,16 +19,16 @@ describe('tokenkit.ft.create()', () => {
     assert.doesNotHaveAnyKeys(klass, ['location', 'origin', 'nonce', 'owner', 'satoshis'])
   })
 
-  it('returns a class with default static properties', () => {
-    const klass = tokenkit.ft.create(fixture)
+  it('returns a class with default static properties', async () => {
+    const klass = await tokenkit.ft.create(fixture)
 
     assert.equal(klass.decimals, 0)
     assert.equal(klass.supply, 0)
     assert.equal(klass.version, '2.0')
   })
 
-  it('accepts decimals number', () => {
-    const klass = tokenkit.ft.create({
+  it('accepts decimals number', async () => {
+    const klass = await tokenkit.ft.create({
       ...fixture,
       decimals: 8,
     })
@@ -37,8 +36,8 @@ describe('tokenkit.ft.create()', () => {
     assert.equal(klass.decimals, 8)
   })
 
-  it('accepts arbitrary properties', () => {
-    const klass = tokenkit.ft.create({
+  it('accepts arbitrary properties', async () => {
+    const klass = await tokenkit.ft.create({
       ...fixture,
       foo: 'bar',
     })
@@ -46,8 +45,8 @@ describe('tokenkit.ft.create()', () => {
     assert.equal(klass.foo, 'bar')
   })
 
-  it('ignores function properties', () => {
-    const klass = tokenkit.ft.create({
+  it('ignores function properties', async () => {
+    const klass = await tokenkit.ft.create({
       ...fixture,
       foo() { return 'bar' },
     })
@@ -55,8 +54,8 @@ describe('tokenkit.ft.create()', () => {
     assert.isUndefined(klass.foo)
   })
 
-  it('has a default class name', () => {
-    const klass = tokenkit.ft.create({
+  it('has a default class name', async () => {
+    const klass = await tokenkit.ft.create({
       ...fixture,
       className: undefined,
     })
@@ -64,31 +63,28 @@ describe('tokenkit.ft.create()', () => {
     assert.equal(klass.name, 'FT')
   })
 
-  it('throws error when metadata is missing', () => {
-    assert.throws(() => {
-      tokenkit.ft.create({
-        ...fixture,
-        metadata: undefined,
-      })
-    }, /^'metadata' is invalid/)
+  it('throws error when metadata is missing', async () => {
+    const promise = tokenkit.ft.create({
+      ...fixture,
+      metadata: undefined,
+    })
+    await assert.isRejected(promise, /^'metadata' is invalid/)
   })
 
-  it('throws error when symbol is missing', () => {
-    assert.throws(() => {
-      tokenkit.ft.create({
-        ...fixture,
-        symbol: undefined,
-      })
-    }, /^'symbol' is invalid/)
+  it('throws error when symbol is missing', async () => {
+    const promise = tokenkit.ft.create({
+      ...fixture,
+      symbol: undefined,
+    })
+    await assert.isRejected(promise, /^'symbol' is invalid/)
   })
 
-  it('throws error when decimals is invalid', () => {
-    assert.throws(() => {
-      tokenkit.ft.create({
-        ...fixture,
-        decimals: -23,
-      })
-    }, /^'decimals' is invalid/)
+  it('throws error when decimals is invalid', async () => {
+    const promise = tokenkit.ft.create({
+      ...fixture,
+      decimals: -23,
+    })
+    await assert.isRejected(promise, /^'decimals' is invalid/)
   })
 })
 
@@ -103,7 +99,7 @@ describe('tokenkit.ft.deploy()', () => {
   })
 
   it('accepts a class', async () => {
-    const klass = tokenkit.ft.create(fixture)
+    const klass = await tokenkit.ft.create(fixture)
     const result = await tokenkit.ft.deploy(klass)
 
     assert.match(result.toString(), /^class\s+/)
@@ -111,8 +107,8 @@ describe('tokenkit.ft.deploy()', () => {
     assert.containsAllKeys(result, ['location', 'origin', 'nonce', 'owner', 'satoshis'])
   })
 
-  it('throws error when params invalid', () => {
-    assert.throws(() => tokenkit.ft.create({}))
+  it('throws error when params invalid', async () => {
+    await assert.isRejected(tokenkit.ft.create({}))
   })
 })
 

@@ -36,10 +36,11 @@ const schema = {
 /**
  * Dynamically creates a Class extending from Run.extra.Token.
  * 
+ * @async
  * @param {object} params Token parameters
  * @returns {class}
  */
- export function create(params) {
+ export async function create(params) {
   const {
     className,
     metadata,
@@ -60,7 +61,7 @@ const schema = {
 
   // Attach arbitrary static props & relay requirements
   applyStaticProps(klass, props)
-  applyRelayRequirements(klass)
+  await applyRelayRequirements(klass)
 
   return klass
 }
@@ -76,7 +77,7 @@ const schema = {
 export async function deploy(params) {
   const klass = /^class\s+/.test(params.toString()) ?
     params :
-    create(params);
+    await create(params);
 
   return deployClass(klass)
 }
@@ -92,7 +93,7 @@ export async function deploy(params) {
  export async function upgrade(origin, params) {
   const klass = /^class\s+/.test(params.toString()) ?
     params :
-    create(params);
+    await create(params);
 
   // Build list of updated keys, except protected
   const updated = Object.keys(klass).filter(k => !['supply'].includes(k))

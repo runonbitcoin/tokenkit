@@ -18,21 +18,13 @@ or
 <script src="//unpkg.com/univrse/@runonbitcoin/tokenkit"></script>
 ```
 
-Setup
-
-```js
-import Run from 'run-sdk'
-import tokenkit from '@runonbitcoin/tokenkit'
-
-const run = new Run()
-tokenkit.init(run)
-```
-
 ## Create and mint tokens
 
 Fungible tokens
 
 ```js
+import tokenkit from '@runonbitcoin/tokenkit'
+
 // Returns a class
 const MyCoin = tokenkit.ft.create({
   className: 'MyCoin',

@@ -1,17 +1,16 @@
 import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import { run } from '../support/run.js'
 import { nftFixture as fixture } from '../support/fixtures.js'
 import tokenkit from '../../src/index.js'
 import { JigBox } from '../../src/tokens/box.js'
+import '../support/run.js'
 
 chai.use(chaiAsPromised)
-tokenkit.init(run)
 
 
 describe('tokenkit.nft.create()', () => {
-  it('returns a class with valid parameters', () => {
-    const klass = tokenkit.nft.create(fixture)
+  it('returns a class with valid parameters', async () => {
+    const klass = await tokenkit.nft.create(fixture)
 
     assert.match(klass.toString(), /^class\s+/)
     assert.equal(klass.name, 'FooNFT')
@@ -19,15 +18,15 @@ describe('tokenkit.nft.create()', () => {
     assert.doesNotHaveAnyKeys(klass, ['location', 'origin', 'nonce', 'owner', 'satoshis'])
   })
 
-  it('returns a class with default static properties', () => {
-    const klass = tokenkit.nft.create(fixture)
+  it('returns a class with default static properties', async () => {
+    const klass = await tokenkit.nft.create(fixture)
 
     assert.equal(klass.supply, 0)
     assert.equal(klass.version, '1.0')
   })
 
-  it('accepts maxSupply number', () => {
-    const klass = tokenkit.nft.create({
+  it('accepts maxSupply number', async () => {
+    const klass = await tokenkit.nft.create({
       ...fixture,
       maxSupply: 500,
     })
@@ -35,8 +34,8 @@ describe('tokenkit.nft.create()', () => {
     assert.equal(klass.maxSupply, 500)
   })
 
-  it('accepts arbitrary properties', () => {
-    const klass = tokenkit.nft.create({
+  it('accepts arbitrary properties', async () => {
+    const klass = await tokenkit.nft.create({
       ...fixture,
       foo: 'bar',
     })
@@ -44,8 +43,8 @@ describe('tokenkit.nft.create()', () => {
     assert.equal(klass.foo, 'bar')
   })
 
-  it('ignores function properties', () => {
-    const klass = tokenkit.nft.create({
+  it('ignores function properties', async () => {
+    const klass = await tokenkit.nft.create({
       ...fixture,
       foo() { return 'bar' },
     })
@@ -53,8 +52,8 @@ describe('tokenkit.nft.create()', () => {
     assert.isUndefined(klass.foo)
   })
 
-  it('has a default class name', () => {
-    const klass = tokenkit.nft.create({
+  it('has a default class name', async () => {
+    const klass = await tokenkit.nft.create({
       ...fixture,
       className: undefined,
     })
@@ -62,22 +61,22 @@ describe('tokenkit.nft.create()', () => {
     assert.equal(klass.name, 'NFT')
   })
 
-  it('throws error when metadata is missing', () => {
-    assert.throws(() => {
-      tokenkit.nft.create({
-        ...fixture,
-        metadata: undefined,
-      })
-    }, /^'metadata' is invalid/)
+  it('throws error when metadata is missing', async () => {
+    const promise = tokenkit.nft.create({
+      ...fixture,
+      metadata: undefined,
+    })
+
+    await assert.isRejected(promise, /^'metadata' is invalid/)
   })
 
-  it('throws error when maxSupply is invalid', () => {
-    assert.throws(() => {
-      tokenkit.nft.create({
-        ...fixture,
-        maxSupply: 'abc',
-      })
-    }, /^'maxSupply' is invalid/)
+  it('throws error when maxSupply is invalid', async () => {
+    const promise = tokenkit.nft.create({
+      ...fixture,
+      maxSupply: 'abc',
+    })
+
+    await assert.isRejected(promise, /^'maxSupply' is invalid/)
   })
 })
 
@@ -92,7 +91,7 @@ describe('tokenkit.nft.deploy()', () => {
   })
 
   it('accepts a class', async () => {
-    const klass = tokenkit.nft.create(fixture)
+    const klass = await tokenkit.nft.create(fixture)
     const result = await tokenkit.nft.deploy(klass)
 
     assert.match(result.toString(), /^class\s+/)
@@ -100,8 +99,8 @@ describe('tokenkit.nft.deploy()', () => {
     assert.containsAllKeys(result, ['location', 'origin', 'nonce', 'owner', 'satoshis'])
   })
 
-  it('throws error when params invalid', () => {
-    assert.throws(() => tokenkit.nft.create({}))
+  it('throws error when params invalid', async () => {
+    await assert.isRejected(tokenkit.nft.create({}))
   })
 })
 

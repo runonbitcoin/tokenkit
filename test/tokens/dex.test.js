@@ -1,14 +1,14 @@
 import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import { run } from '../support/run.js'
 import { ftFixture, nftFixture } from '../support/fixtures.js'
 import tokenkit from '../../src/index.js'
+import { run } from '../support/run.js'
 
 chai.use(chaiAsPromised)
-tokenkit.init(run)
+
 
 const fixture = {
-  address: 'mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN',
+  address: run.purse.address,
   satoshis: 100000
 }
 
@@ -34,7 +34,7 @@ describe('DEX.createOffer() with fungible token', () => {
 
     assert.instanceOf(jig, jigbox.contract)
     assert.equal(jig.amount, 4000)
-    assert.equal(jig.owner.address, 'mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN')
+    assert.equal(jig.owner.address, run.purse.address)
     assert.equal(jig.owner.satoshis, 100000)
     assert.equal(jig.sender, run.owner.address)
   })
@@ -97,7 +97,7 @@ describe('DEX.createOffer() with non-fungible token', () => {
     })
 
     assert.instanceOf(jig, jigbox.contract)
-    assert.equal(jig.owner.address, 'mfjPijd3gNj1Tx7QcdZaSWCEYbxfeVRaxN')
+    assert.equal(jig.owner.address, run.purse.address)
     assert.equal(jig.owner.satoshis, 100000)
     assert.equal(jig.sender, run.owner.address)
   })
@@ -126,5 +126,51 @@ describe('DEX.createOffer() with non-fungible token', () => {
       satoshis: 'abc'
     })
     await assert.isRejected(promise, /^'satoshis' is invalid/)
+  })
+})
+
+
+describe('DEX.takeOffer()', () => {
+  let klass, jigbox, offer
+  beforeEach(async () => {
+    klass = await tokenkit.ft.deploy(ftFixture)
+    await tokenkit.ft.mint(klass.origin, [
+      [5000, run.owner.address],
+    ])
+
+    jigbox = await tokenkit.ft.getJigBox(klass.origin)
+
+    offer = await tokenkit.dex.createOffer({
+      ...fixture,
+      jigbox,
+      amount: 4000,
+    })
+  })
+
+  it('testing take', async () => {
+    await tokenkit.dex.takeOffer(offer.location)
+  })
+})
+
+
+describe('DEX.cancelOffer()', () => {
+  let klass, jigbox, offer
+  beforeEach(async () => {
+    klass = await tokenkit.ft.deploy(ftFixture)
+    await tokenkit.ft.mint(klass.origin, [
+      [5000, run.owner.address],
+    ])
+
+    jigbox = await tokenkit.ft.getJigBox(klass.origin)
+
+    offer = await tokenkit.dex.createOffer({
+      ...fixture,
+      jigbox,
+      amount: 4000,
+    })
+  })
+
+  it('testing cancel', async () => {
+    await tokenkit.dex.cancelOffer(offer.location)
   })
 })
