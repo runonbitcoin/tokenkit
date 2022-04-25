@@ -1,7 +1,7 @@
 import Run from 'run-sdk'
 import $ from '../run.js'
 
-// TODO
+// Defines the OrderLock presets
 const orderLockPresets = {
   main: {
     location: 'd6170025a62248d8df6dc14e3806e68b8df3d804c800c7bfb23b0b4232862505_o1',
@@ -14,20 +14,11 @@ const orderLockPresets = {
 }
 
 /**
- * TODO
- * 
- * @returns 
- */
-export async function loadOrderLock() {
-  const { location } = orderLockPresets[$.run.network]
-  return $.run.load(location)
-}
-
-/**
  * Applies default properties to the class on order to be compatible with the
  * relay DEX.
  * 
  * @param {class} klass Target class
+ * @returns {Promise<void>}
  */
 export async function applyRelayRequirements(klass) {
   const OrderLock = await loadOrderLock()
@@ -46,6 +37,7 @@ export async function applyRelayRequirements(klass) {
  * 
  * @param {class} klass Target class
  * @param {object} props Propeties
+ * @returns {void}
  */
  export function applyStaticProps(klass, props) {
   Object.keys(props)
@@ -81,7 +73,6 @@ export function createClass(name, klass, transferable = false) {
 /**
  * Deploys the class and returns a Run Code instance.
  * 
- * @async
  * @param {class} klass Undeployed class
  * @return {Promise<Run.Code>}
  */
@@ -92,11 +83,20 @@ export async function deployClass(klass) {
 }
 
 /**
+ * Loads and returns the OrderLock class.
+ * 
+ * @returns {Promise<Run.Code>}
+ */
+ export async function loadOrderLock() {
+  const { location } = orderLockPresets[$.run.network]
+  return $.run.load(location)
+}
+
+/**
  * Loads the Code from the origin and calls mint for each of the given recipients.
  * 
  * All mint ops are consolidated in a single transaction and the txid returned.
  * 
- * @async
  * @param {string} origin Code origin
  * @param {array[]} recipients Array of array of arguments
  * @return {Promise<txid>}
@@ -123,7 +123,6 @@ export async function mintTokens(origin, recipients) {
  * By default all static properties from the original class are copied to the
  * new class. Avoid this by explicitly listing changed static props.
  * 
- * @async
  * @param {string} origin Code origin
  * @param {class} newClass Undeployed class
  * @param {string[]} updated Array of updated static properties

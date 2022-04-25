@@ -48,7 +48,6 @@ function isJigBox(subject) {
 /**
  * Creates and returns an offer from the given parameters.
  * 
- * @async
  * @param {object} params Offer parameters
  * @returns {Promise<Run.Jig>}
  */
@@ -114,7 +113,6 @@ async function createOfferFromJigBox(tx, jigbox, amount, lock) {
  * Accepts an offer by the given jig location. Uses the Run instance purse to
  * pay for the offer. Returns a txid.
  * 
- * @async
  * @param {string} location Offer location
  * @returns {Promise<string>}
  */
@@ -147,7 +145,6 @@ export async function takeOffer(location) {
 /**
  * Cancels an offer by the given jig location. Returns a txid.
  * 
- * @async
  * @param {string} location Offer location
  * @returns {Promise<string>}
  */

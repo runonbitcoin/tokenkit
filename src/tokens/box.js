@@ -25,7 +25,6 @@ export class JigBox {
   /**
    * Creates a JigBox from the given Run.Code class.
    * 
-   * @async
    * @constructor
    * @param {Run.Code} contract Deployed code
    * @param {string} type FT or NFT
@@ -40,7 +39,6 @@ export class JigBox {
   /**
    * Creates a JigBox from the given Run.Code origin.
    * 
-   * @async
    * @constructor
    * @param {string} contract Deployed code origin
    * @param {string} type FT or NFT
@@ -76,7 +74,6 @@ export class JigBox {
    * 
    * An error will be throw if this is called on a JigBox with the type `NFT`.
    * 
-   * @async
    * @param {string|Run.api.Lock} owner Recipient
    * @param {number} amount Tokens to send
    * @returns {Promise<string>}
@@ -106,7 +103,6 @@ export class JigBox {
    * ])
    * ```
    * 
-   * @async
    * @param {string|Run.api.Lock} owner Recipient
    * @param {number} amount Tokens to send
    * @returns {Promise<string>}
@@ -139,7 +135,6 @@ export class JigBox {
    * 
    * An error will be throw if this is called on a JigBox with the type `NFT`.
    * 
-   * @async
    * @param {number} amount Tokens to burn
    * @returns {Promise<string>}
    */
@@ -173,7 +168,7 @@ export class JigBox {
    * Sync the JigBox with the Run network. Called automatically when a JigBox is
    * created and after each send.
    * 
-   * @async
+   * @returns {Promise<void>}
    */
   async sync() {
     await $.run.inventory.sync()

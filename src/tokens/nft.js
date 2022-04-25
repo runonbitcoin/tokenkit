@@ -32,9 +32,8 @@ const schema = {
 /**
  * Dynamically creates a Class extending from Run.extra.NFT.
  * 
- * @async
  * @param {object} params Token parameters
- * @returns {class}
+ * @returns {Promise<class>}
  */
 export async function create(params) {
   const {
@@ -66,7 +65,6 @@ export async function create(params) {
  * Dynamically creates and deploys a class extending from Run.extra.NFT.
  * Optionally can be given an existing undeployed class.
  * 
- * @async
  * @param {object|class} params Token parameters or undeployed class
  * @returns {Promise<Run.Code>}
  */
@@ -81,7 +79,6 @@ export async function deploy(params) {
 /**
  * Fetches Code from the origin and upgrades it with the given parameters.
  * 
- * @async
  * @param {string} origin Code origin
  * @param {object|class} params Token parameters or undeployed class
  * @returns {Promise<Run.Code>}
@@ -101,7 +98,6 @@ export async function upgrade(origin, params) {
 /**
  * Returns the current Run owner's JigBox for the given code origin.
  * 
- * @async
  * @param {string} origin Code origin
  * @returns {Promise<JigBox>}
  */
