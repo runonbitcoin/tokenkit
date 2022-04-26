@@ -18,13 +18,13 @@ The `TokenInterface` is an API for creating, minting and upgrading token classes
 
 The api is identical for both fungible and non-fungible tokens.
 
-| function                                            | returns           |
-| --------------------------------------------------- | ----------------- |
-| `create(params: object)`                            | `Promise<class>`  |
-| `deploy(params: object | class)`                    | `Promise<Code>`   |
-| `mint(origin: string, recipients: object[])`        | `Promise<string>` |
-| `upgrade(origin: string, params: object | class)`   | `Promise<Code>`   |
-| `getJigBox(origin: string, params: object | class)` | `Promise<JigBox>` |
+| function                                             | returns           |
+| ---------------------------------------------------- | ----------------- |
+| `create(params: object)`                             | `Promise<class>`  |
+| `deploy(params: object \| class)`                    | `Promise<Code>`   |
+| `mint(origin: string, recipients: object[])`         | `Promise<string>` |
+| `upgrade(origin: string, params: object \| class)`   | `Promise<Code>`   |
+| `getJigBox(origin: string, params: object \| class)` | `Promise<JigBox>` |
 
 ### Create and mint fungible tokens
 
@@ -80,17 +80,17 @@ A `JigBox` is, well, a box of Jigs. It provides a simple interface through which
 
 The JigBox makes it simple to combine, send and burn tokens.
 
-| property / function                          | returns           |
-| -------------------------------------------- | ----------------- |
-| `contract`                                   | `Code`            |
-| `type`                                       | `"ft"` or `"nft"` |
-| `jigs`                                       | `Jig[]`           |
-| `balance`                                    | `number`          |
-| `balanceAsDecimal`                           | `string`          |
-| `send(owner: string | Lock, amount: number)` | `Promise<string>` |
-| `sendMany(recipients: object[])`             | `Promise<string>` |
-| `burn(amount: number)`                       | `Promise<string>` |
-| `sync()`                                     | `Promise<void>`   |
+| property / function                           | returns           |
+| --------------------------------------------- | ----------------- |
+| `contract`                                    | `Code`            |
+| `type`                                        | `"ft"` or `"nft"` |
+| `jigs`                                        | `Jig[]`           |
+| `balance`                                     | `number`          |
+| `balanceAsDecimal`                            | `string`          |
+| `send(owner: string \| Lock, amount: number)` | `Promise<string>` |
+| `sendMany(recipients: object[])`              | `Promise<string>` |
+| `burn(amount: number)`                        | `Promise<string>` |
+| `sync()`                                      | `Promise<void>`   |
 
 ```js
 const box = await tokenkit.ft.getJigBox(origin)
