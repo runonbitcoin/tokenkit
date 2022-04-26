@@ -93,6 +93,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@runonbitcoin/nimble@npm:^1.0.9":
+  version: 1.0.10
+  resolution: "@runonbitcoin/nimble@npm:1.0.10"
+  checksum: eec0c49a60f9d8d768c9e71dfefc54d215007e53b9f27d9d78337f1a3550ce0aecfc5c9ca2c6f58fadd0ffcc0a92299886972571242e716bdf6cf82eb55a700b
+  languageName: node
+  linkType: hard
+
 "@runonbitcoin/tokenkit@workspace:.":
   version: 0.0.0-use.local
   resolution: "@runonbitcoin/tokenkit@workspace:."
@@ -2323,10 +2330,11 @@ __metadata:
 
 "run-sdk@file:///Users/aaron/Dev/run/run::locator=%40runonbitcoin%2Ftokenkit%40workspace%3A.":
   version: 0.6.35
-  resolution: "run-sdk@file:///Users/aaron/Dev/run/run#///Users/aaron/Dev/run/run::hash=1542d9&locator=%40runonbitcoin%2Ftokenkit%40workspace%3A."
+  resolution: "run-sdk@file:///Users/aaron/Dev/run/run#///Users/aaron/Dev/run/run::hash=56d0f2&locator=%40runonbitcoin%2Ftokenkit%40workspace%3A."
   dependencies:
+    "@runonbitcoin/nimble": ^1.0.9
     bsv: ^1.5.6
-  checksum: 8f09876894f87d294124c5439bd797f34b3a3afa2b2755751236cd3f82d9e4fbccc2c1f1ca1d457738d472b5fe42a86ccdd853e622943a5453596c0432ba4771
+  checksum: e38c7bd226668904ecd742ca81c3a37ccfda8b246a807b25c8364f67f4a47f43f2bc8f9d97e894d0b0b18525398b5fba9e6add5330868f60cf6d1399cff3532d
   languageName: node
   linkType: hard
 

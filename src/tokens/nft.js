@@ -1,4 +1,4 @@
-import Run from 'run-sdk'
+import $ from '../run.js'
 import { JigBox } from './box.js'
 import {
   applyRelayRequirements,
@@ -45,7 +45,7 @@ export async function create(params) {
   } = validateParams(params, schema)
 
   // Dynamically create class from base
-  const klass = createClass(className, Run.extra.NFT, transferable)
+  const klass = createClass(className, $.Run.extra.NFT, transferable)
 
   // Set static props
   klass.metadata = metadata

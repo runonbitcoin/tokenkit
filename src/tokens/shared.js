@@ -1,4 +1,3 @@
-import Run from 'run-sdk'
 import $ from '../run.js'
 
 // Defines the OrderLock presets
@@ -109,7 +108,7 @@ export async function mintTokens(origin, recipients) {
   const klass = await $.run.load(origin)
   await klass.sync()
 
-  const tx = new Run.Transaction()
+  const tx = new $.Run.Transaction()
   for (let args of recipients) {
     if (!Array.isArray(args)) args = [args];
     tx.update(() => klass.mint(...args))

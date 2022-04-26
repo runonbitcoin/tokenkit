@@ -1,4 +1,3 @@
-import Run from 'run-sdk'
 import $ from '../run.js'
 
 /**
@@ -81,7 +80,7 @@ export class JigBox {
   async send(owner, amount) {
     ensureFungibleToken(this)
 
-    const tx = new Run.Transaction()
+    const tx = new $.Run.Transaction()
     if (this.jigs.length > 1) {
       tx.update(() => this.jigs[0].combine(...this.jigs.slice(1)))
     }
@@ -113,7 +112,7 @@ export class JigBox {
       throw new Error('Invalid recipients. `sendMany(recipients)` expects an array of recipients.')
     }
 
-    const tx = new Run.Transaction()
+    const tx = new $.Run.Transaction()
     if (this.jigs.length > 1) {
       const jigs = this.jigs.slice(1)
       tx.update(() => this.jigs[0].combine(...jigs))
@@ -142,7 +141,7 @@ export class JigBox {
     ensureFungibleToken(this)
 
     // First tx is combine and split
-    const tx1 = new Run.Transaction()
+    const tx1 = new $.Run.Transaction()
     if (this.jigs.length > 1) {
       const jigs = this.jigs.slice(1)
       tx1.update(() => this.jigs[0].combine(...jigs))
@@ -156,7 +155,7 @@ export class JigBox {
     await jig.sync()
 
     // Second tx does ze burn
-    const tx2 = new Run.Transaction()
+    const tx2 = new $.Run.Transaction()
     tx2.update(() => jig.destroy())
     const txid2 = await tx2.publish()
     await this.sync()

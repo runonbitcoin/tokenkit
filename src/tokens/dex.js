@@ -1,11 +1,3 @@
-import Run from 'run-sdk'
-import BufferWriter from '@runonbitcoin/nimble/classes/buffer-writer.js'
-import Transaction from '@runonbitcoin/nimble/classes/transaction.js'
-import flags from '@runonbitcoin/nimble/constants/sighash-flags.js'
-import opcodes from '@runonbitcoin/nimble/constants/opcodes.js'
-import preimage from '@runonbitcoin/nimble/functions/preimage.js'
-import writePushData from '@runonbitcoin/nimble/functions/write-push-data.js'
-import verifyScriptAsync from '@runonbitcoin/nimble/functions/verify-script-async.js'
 import $ from '../run.js'
 import { JigBox } from './box.js'
 import { loadOrderLock } from './shared.js'
@@ -15,6 +7,10 @@ import {
   validateString,
   validateParams,
 } from './validations.js'
+
+const { BufferWriter, Transaction } = $.Run.nimble
+const { opcodes, sighashFlags } = $.Run.nimble.constants
+const { preimage, writePushData, verifyScriptAsync } = $.Run.nimble.functions
 
 // Offer validation Schema
 const schema = {
@@ -92,7 +88,7 @@ export async function makeOffer(params = {}) {
 
 // Helper function returns a base tx for the offer transaction
 async function offerBaseTx(address) {
-  const tx = new Run.Transaction()
+  const tx = new $.Run.Transaction()
 
   const base = new Transaction()
   base.to(address, 546) // cancel utxo
@@ -190,7 +186,7 @@ export async function cancelOffer(location) {
 // Helper function returns a base tx for the take offer transaction
 async function takeOfferBaseTx(offer) {
   const myself = await $.run.owner.nextOwner()
-  const runtx = new Run.Transaction()
+  const runtx = new $.Run.Transaction()
 
   const base = new Transaction()
   base.to(offer.owner.address, offer.owner.satoshis)
@@ -207,7 +203,7 @@ async function takeOfferBaseTx(offer) {
 // Helper function returns a base tx for the cancel offer transaction
 async function cancelOfferBaseTx(offer, cancelTxOut) {
   const myself = await $.run.owner.nextOwner()
-  const runtx = new Run.Transaction()
+  const runtx = new $.Run.Transaction()
 
   runtx.update(() => offer.send(myself, offer.amount))
 
@@ -223,8 +219,8 @@ async function cancelOfferBaseTx(offer, cancelTxOut) {
 // Helper function returns the offer unlock script
 function offerUnlockScript(tx, vin, { script, satoshis }, cancel = false) {
   const sighashType = cancel ?
-    flags.SIGHASH_NONE | flags.SIGHASH_FORKID :
-    flags.SIGHASH_SINGLE | flags.SIGHASH_ANYONECANPAY | flags.SIGHASH_FORKID;
+    sighashFlags.SIGHASH_NONE | sighashFlags.SIGHASH_FORKID :
+    sighashFlags.SIGHASH_SINGLE | sighashFlags.SIGHASH_ANYONECANPAY | sighashFlags.SIGHASH_FORKID;
 
   const preimg = preimage(tx, vin, script, satoshis, sighashType)
 
