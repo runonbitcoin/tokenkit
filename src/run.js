@@ -1,10 +1,8 @@
+import Run from 'run-sdk'
+
 /**
  * Module to fetch global Run instance.
  */
-
-import Run from 'run-sdk'
-
-// Public state api
 export default {
   get run() {
     if (!Run.instance) {

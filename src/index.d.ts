@@ -83,8 +83,8 @@ export interface TokenInterface {
 }
 
 export interface DexInterface {
-  createOffer(params: OfferParams): Promise<RunJig>;
   listOffers(origin: string): Promise<RunJig[]>;
+  makeOffer(params: OfferParams): Promise<RunJig>;
   takeOffer(location: string): Promise<txid>;
   cancelOffer(location: string): Promise<txid>;
 }

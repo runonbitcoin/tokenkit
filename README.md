@@ -1,32 +1,38 @@
-# Run Token Kit
+# Run tokenkit
 
-Docs TODO
+Run tokenkit provides a simple interface through which to create fungible and non-fungible tokens using [Run](https://run.network).
 
-## Getting started
+This repo contains the source code, but tokenkit is distributed with the `run-sdk`.
 
-Install
+## Interface
 
-```console
-npm install @runonbitcoin/tokenkit
-# or
-yarn add @runonbitcoin/tokenkit
-```
+| namespace      | interface                              |
+| -------------- | -------------------------------------- |
+| `tokenkit.ft`  | `TokenInterface` (fungible tokens)     |
+| `tokenkit.nft` | `TokenInterface` (non-fungible tokens) |
+| `tokenkit.dex` | `DexInterface`                         |
 
-or
+## `TokenInterface`
 
-```html
-<script src="//unpkg.com/univrse/@runonbitcoin/tokenkit"></script>
-```
+The `TokenInterface` is an API for creating, minting and upgrading token classes.
 
-## Create and mint tokens
+The api is identical for both fungible and non-fungible tokens.
 
-Fungible tokens
+| function                                            | returns           |
+| --------------------------------------------------- | ----------------- |
+| `create(params: object)`                            | `Promise<class>`  |
+| `deploy(params: object | class)`                    | `Promise<Code>`   |
+| `mint(origin: string, recipients: object[])`        | `Promise<string>` |
+| `upgrade(origin: string, params: object | class)`   | `Promise<Code>`   |
+| `getJigBox(origin: string, params: object | class)` | `Promise<JigBox>` |
+
+### Create and mint fungible tokens
+
+Pre-upload images using [Easy B](https://github.com/runonbitcoin/easy-b).
 
 ```js
-import tokenkit from '@runonbitcoin/tokenkit'
-
-// Returns a class
-const MyCoin = tokenkit.ft.create({
+// Returns deployed Run Code
+const MyCoin = tokenkit.ft.deploy({
   className: 'MyCoin',
   metadata: {
     name: 'My Coin',
@@ -37,11 +43,8 @@ const MyCoin = tokenkit.ft.create({
   decimals: 2,
 })
 
-// Deploys a class - accepts a class or same params as above
-const deployedCode = await tokenkit.ft.deploy(MyCoin)
-
 // Mint coins to many recipients - returns txid
-await tokenkit.ft.mint(deployedCode.origin, [
+await tokenkit.ft.mint(MyCoin.origin, [
   [100000000, '1DsPKMo8s9F4a22Px5F8RpAQoV1dDQ5HD9'],
   [100000000, '1GPe3sjxeDmvXUjP9jaZwnBEunvRLghahi'],
   [100000000, '1EtzqQMMaP8xEjv2mzHKrAN3LXrSEtHPAQ'],
@@ -49,10 +52,10 @@ await tokenkit.ft.mint(deployedCode.origin, [
 ])
 ```
 
-Non-fungible tokens - almost identical api
+### Create and mint non-fungible tokens
 
 ```js
-const deployedCode = await tokenkit.ft.deploy({
+const MyNFT = await tokenkit.ft.deploy({
   className: 'MyNFT',
   metadata: {
     name: 'My NFT',
@@ -63,7 +66,7 @@ const deployedCode = await tokenkit.ft.deploy({
 })
 
 // Mint tokens to many recipients - returns txid
-await tokenkit.ft.mint(deployedCode.origin, [
+await tokenkit.ft.mint(MyNFT.origin, [
   '1DsPKMo8s9F4a22Px5F8RpAQoV1dDQ5HD9',
   '1GPe3sjxeDmvXUjP9jaZwnBEunvRLghahi',
   '1EtzqQMMaP8xEjv2mzHKrAN3LXrSEtHPAQ',
@@ -73,10 +76,24 @@ await tokenkit.ft.mint(deployedCode.origin, [
 
 ## JigBoxes
 
-Work with the Run owners account of a given token
+A `JigBox` is, well, a box of Jigs. It provides a simple interface through which you can work with the current Run owner's jigs for a given class.
+
+The JigBox makes it simple to combine, send and burn tokens.
+
+| property / function                          | returns           |
+| -------------------------------------------- | ----------------- |
+| `contract`                                   | `Code`            |
+| `type`                                       | `"ft"` or `"nft"` |
+| `jigs`                                       | `Jig[]`           |
+| `balance`                                    | `number`          |
+| `balanceAsDecimal`                           | `string`          |
+| `send(owner: string | Lock, amount: number)` | `Promise<string>` |
+| `sendMany(recipients: object[])`             | `Promise<string>` |
+| `burn(amount: number)`                       | `Promise<string>` |
+| `sync()`                                     | `Promise<void>`   |
 
 ```js
-const box = tokenkit.ft.getJigBox(origin)
+const box = await tokenkit.ft.getJigBox(origin)
 
 // API
 box.contract            // deployedCode
@@ -99,23 +116,60 @@ await box.sendMany([
 await box.sync()
 ```
 
-Fungible token JigBoxes have a smaller API surface
+❗️ Note that non-fungible token JigBoxes have a smaller API surface.
+
+The balance properties and send functions do not apply to NFT JigBoxes. Instead access the jigs directly and use the send method on the jig itself.
 
 ```js
-const box = tokenkit.nft.getJigBox(origin)
+const box = await tokenkit.nft.getJigBox(origin)
 
 box.contract            // deployedCode
 box.type                // FT or NFT
 box.jigs                // array of jigs
-box.sync()              // syncs the jib box
+box.sync()              // syncs the jig box
 ```
 
-The balance properties and send functions do not apply to NFT JigBoxes. Instead
-access the jigs directly and use the send method on the jig itself.
+## `DexInterface`
+
+Tokens created with tokenkit are compatible with the [RelayX DEX](https://relayx.com/). The `DexInterface` allows you to interact with the dex, and buy and sell tokens.
+
+| function                        | returns           |
+| ------------------------------- | ----------------- |
+| `listOffers(origin: string)`    | `Promise<Jig[]>`  |
+| `makeOffer(params: object)`     | `Promise<Jig>`    |
+| `takeOffer(location: string)`   | `Promise<string>` |
+| `cancelOffer(location: string)` | `Promise<string>` |
+
+```js
+// Make a sell offer from a JigBox (for fungible tokens)
+const box = await tokenkit.ft.getJigBox(origin)
+const offer = await tokenkit.dex.makeOffer({
+  jigbox: box,
+  amount: 5000,                                     // number of tokens to sell
+  address: '13fDD3U6PdM5VWHwgLDPwZ3itzgU2BRcDW',    // purse address to receive payment
+  satoshis: 100000,                                 // required payment for all offered tokens
+})
+
+// Make a sell offer from a Jig (for NFTs)
+const offer = await tokenkit.dex.makeOffer({
+  jig: jig,
+  address: '13fDD3U6PdM5VWHwgLDPwZ3itzgU2BRcDW',    // purse address to receive payment
+  satoshis: 50000,                                  // required payment for jig
+})
+
+// Fetch a list of jigs offered for a given class
+const offers = await tokenkit.dex.listOffers(origin)
+
+// Accept an offer - returns txid, resync jigbox to see acquired tokens
+await tokenkit.dex.takeOffer(offer.location)
+
+// Owners can cancel their own offers - returns txid
+await tokenkit.dex.cancelOffer(offer.location)
+```
 
 ## Upgrading classes
 
-For simple changes, for example to upgrade metadata...
+For simple changes, for example to upgrade metadata, the `TokenInterface` provides an easy upgrade function.
 
 ```js
 const upgradedCode = tokenkit.nft.upgrade(origin, {
@@ -127,8 +181,7 @@ const upgradedCode = tokenkit.nft.upgrade(origin, {
 })
 ```
 
-A lower level function can be used for upgrading custom classes not built with
-tokenkit.
+A lower level function can be used for upgrading custom classes not built with tokenkit.
 
 ```js
 // By default all static properties from the original class are copied to the

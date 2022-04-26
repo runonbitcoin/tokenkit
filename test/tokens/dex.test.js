@@ -13,7 +13,7 @@ const fixture = {
 }
 
 
-describe('DEX.createOffer() with fungible token', () => {
+describe('DEX.makeOffer() with fungible token', () => {
   let klass, jigbox
   beforeEach(async () => {
     klass = await tokenkit.ft.deploy(ftFixture)
@@ -26,7 +26,7 @@ describe('DEX.createOffer() with fungible token', () => {
   })
 
   it('creates a sell for a token', async () => {
-    const jig = await tokenkit.dex.createOffer({
+    const jig = await tokenkit.dex.makeOffer({
       ...fixture,
       jigbox,
       amount: 4000,
@@ -40,7 +40,7 @@ describe('DEX.createOffer() with fungible token', () => {
   })
 
   it('throws error if jigbox is not a JigBox', async () => {
-    const promise = tokenkit.dex.createOffer({
+    const promise = tokenkit.dex.makeOffer({
       ...fixture,
       jigbox: { foo: 'bar' },
       amount: 4000,
@@ -49,7 +49,7 @@ describe('DEX.createOffer() with fungible token', () => {
   })
 
   it('throws error if amount is not present', async () => {
-    const promise = tokenkit.dex.createOffer({
+    const promise = tokenkit.dex.makeOffer({
       ...fixture,
       jigbox,
     })
@@ -57,7 +57,7 @@ describe('DEX.createOffer() with fungible token', () => {
   })
 
   it('throws error if address is invalid', async () => {
-    const promise = tokenkit.dex.createOffer({
+    const promise = tokenkit.dex.makeOffer({
       ...fixture,
       jigbox,
       amount: 4000,
@@ -67,7 +67,7 @@ describe('DEX.createOffer() with fungible token', () => {
   })
 
   it('throws error if satoshis is invalid', async () => {
-    const promise = tokenkit.dex.createOffer({
+    const promise = tokenkit.dex.makeOffer({
       ...fixture,
       jigbox,
       amount: 4000,
@@ -78,7 +78,7 @@ describe('DEX.createOffer() with fungible token', () => {
 })
 
 
-describe('DEX.createOffer() with non-fungible token', () => {
+describe('DEX.makeOffer() with non-fungible token', () => {
   let klass, jigbox
   beforeEach(async () => {
     klass = await tokenkit.nft.deploy(nftFixture)
@@ -91,7 +91,7 @@ describe('DEX.createOffer() with non-fungible token', () => {
   })
 
   it('creates a sell for a token', async () => {
-    const jig = await tokenkit.dex.createOffer({
+    const jig = await tokenkit.dex.makeOffer({
       ...fixture,
       jig: jigbox.jigs[0],
     })
@@ -103,7 +103,7 @@ describe('DEX.createOffer() with non-fungible token', () => {
   })
 
   it('throws error if jigbox is not a JigBox', async () => {
-    const promise = tokenkit.dex.createOffer({
+    const promise = tokenkit.dex.makeOffer({
       ...fixture,
       jig: { foo: 'bar' },
     })
@@ -111,7 +111,7 @@ describe('DEX.createOffer() with non-fungible token', () => {
   })
 
   it('throws error if address is invalid', async () => {
-    const promise = tokenkit.dex.createOffer({
+    const promise = tokenkit.dex.makeOffer({
       ...fixture,
       jig: jigbox.jigs[0],
       address: 'notanaddress',
@@ -120,7 +120,7 @@ describe('DEX.createOffer() with non-fungible token', () => {
   })
 
   it('throws error if satoshis is invalid', async () => {
-    const promise = tokenkit.dex.createOffer({
+    const promise = tokenkit.dex.makeOffer({
       ...fixture,
       jig: jigbox.jigs[0],
       satoshis: 'abc'
@@ -140,7 +140,7 @@ describe.skip('DEX.takeOffer()', () => {
 
     jigbox = await tokenkit.ft.getJigBox(klass.origin)
 
-    offer = await tokenkit.dex.createOffer({
+    offer = await tokenkit.dex.makeOffer({
       ...fixture,
       jigbox,
       amount: 4000,
@@ -163,7 +163,7 @@ describe.skip('DEX.cancelOffer()', () => {
 
     jigbox = await tokenkit.ft.getJigBox(klass.origin)
 
-    offer = await tokenkit.dex.createOffer({
+    offer = await tokenkit.dex.makeOffer({
       ...fixture,
       jigbox,
       amount: 4000,

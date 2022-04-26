@@ -65,7 +65,7 @@ export async function listOffers(origin) {
  * @param {object} params Offer parameters
  * @returns {Promise<Run.Jig>}
  */
-export async function createOffer(params = {}) {
+export async function makeOffer(params = {}) {
   const {
     jig,
     jigbox,
