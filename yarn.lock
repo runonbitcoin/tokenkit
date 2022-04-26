@@ -88,8 +88,8 @@ __metadata:
 
 "@runonbitcoin/nimble@file:///Users/aaron/Dev/run/nimble::locator=%40runonbitcoin%2Ftokenkit%40workspace%3A.":
   version: 1.0.10
-  resolution: "@runonbitcoin/nimble@file:///Users/aaron/Dev/run/nimble#///Users/aaron/Dev/run/nimble::hash=5c4c31&locator=%40runonbitcoin%2Ftokenkit%40workspace%3A."
-  checksum: b3a98a0e64f9b6d53d6c999dba1962409b0d8617d5b1328e40d251cf8de041a725594397cd85ec84b9dadbcb95923e61d7c01b762b8c001cfa3716682a03ba64
+  resolution: "@runonbitcoin/nimble@file:///Users/aaron/Dev/run/nimble#///Users/aaron/Dev/run/nimble::hash=910f95&locator=%40runonbitcoin%2Ftokenkit%40workspace%3A."
+  checksum: 791ae0e4f5db6c0e58a34eb01116a8d7b716f3864c7ce97ea4b446b7042872248ac2d71f750ecf8f3d7b5c64301dcad9193aae7931d18b4e673b425f66b030ee
   languageName: node
   linkType: hard
 
@@ -103,6 +103,8 @@ __metadata:
     esbuild: ^0.14.34
     esbuild-plugin-globals: ^0.1.1
     esm: ^3.2.25
+    ky: ^0.30.0
+    ky-universal: ^0.10.1
     mocha: ^9.2.2
     run-sdk: "file:///Users/aaron/Dev/run/run"
     tsd: ^0.20.0
@@ -177,6 +179,15 @@ __metadata:
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
   checksum: a4a97ec07d7ea112c517036882b2ac22f3109b7b19077dc656316d07d308438aac28e4d9746dc4d84bf6b1e75b4a7b0a5f3cb30592419f128ca9a8cee3bcfa17
+  languageName: node
+  linkType: hard
+
+"abort-controller@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "abort-controller@npm:3.0.0"
+  dependencies:
+    event-target-shim: ^5.0.0
+  checksum: 170bdba9b47b7e65906a28c8ce4f38a7a369d78e2271706f020849c1bfe0ee2067d4261df8bbb66eb84f79208fd5b710df759d64191db58cfba7ce8ef9c54b75
   languageName: node
   linkType: hard
 
@@ -623,6 +634,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"data-uri-to-buffer@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "data-uri-to-buffer@npm:4.0.0"
+  checksum: a010653869abe8bb51259432894ac62c52bf79ad761d418d94396f48c346f2ae739c46b254e8bb5987bded8a653d467db1968db3a69bab1d33aa5567baa5cfc7
+  languageName: node
+  linkType: hard
+
 "debug@npm:4, debug@npm:^4.1.0, debug@npm:^4.3.1":
   version: 4.3.4
   resolution: "debug@npm:4.3.4"
@@ -1033,6 +1051,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"event-target-shim@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "event-target-shim@npm:5.0.1"
+  checksum: 1ffe3bb22a6d51bdeb6bf6f7cf97d2ff4a74b017ad12284cc9e6a279e727dc30a5de6bb613e5596ff4dc3e517841339ad09a7eec44266eccb1aa201a30448166
+  languageName: node
+  linkType: hard
+
 "fast-glob@npm:^3.2.9":
   version: 3.2.11
   resolution: "fast-glob@npm:3.2.11"
@@ -1052,6 +1077,16 @@ __metadata:
   dependencies:
     reusify: ^1.0.4
   checksum: 32cf15c29afe622af187d12fc9cd93e160a0cb7c31a3bb6ace86b7dea3b28e7b72acde89c882663f307b2184e14782c6c664fa315973c03626c7d4bff070bb0b
+  languageName: node
+  linkType: hard
+
+"fetch-blob@npm:^3.1.2, fetch-blob@npm:^3.1.4":
+  version: 3.1.5
+  resolution: "fetch-blob@npm:3.1.5"
+  dependencies:
+    node-domexception: ^1.0.0
+    web-streams-polyfill: ^3.0.3
+  checksum: 6493f21bfe196798343431d20c0284835202728d076dd2cbf502a2846679f9265f3b0c3a7224750ae1a770b925da09e592b05fe7c3a22ca27794a39a0039ab21
   languageName: node
   linkType: hard
 
@@ -1090,6 +1125,15 @@ __metadata:
   bin:
     flat: cli.js
   checksum: 12a1536ac746db74881316a181499a78ef953632ddd28050b7a3a43c62ef5462e3357c8c29d76072bb635f147f7a9a1f0c02efef6b4be28f8db62ceb3d5c7f5d
+  languageName: node
+  linkType: hard
+
+"formdata-polyfill@npm:^4.0.10":
+  version: 4.0.10
+  resolution: "formdata-polyfill@npm:4.0.10"
+  dependencies:
+    fetch-blob: ^3.1.2
+  checksum: 82a34df292afadd82b43d4a740ce387bc08541e0a534358425193017bf9fb3567875dc5f69564984b1da979979b70703aa73dee715a17b6c229752ae736dd9db
   languageName: node
   linkType: hard
 
@@ -1549,6 +1593,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ky-universal@npm:^0.10.1":
+  version: 0.10.1
+  resolution: "ky-universal@npm:0.10.1"
+  dependencies:
+    abort-controller: ^3.0.0
+    node-fetch: ^3.2.2
+  peerDependencies:
+    ky: ">=0.26.0"
+    web-streams-polyfill: ">=3.0.1"
+  peerDependenciesMeta:
+    web-streams-polyfill:
+      optional: true
+  checksum: 61459a8bf62a9c3d2f3efe7893b9a621b21a68208acae6fb7f571d64a57be802d713a1cd147928e734b82539ffab23c12c8cffd6e5b2fa550c22e9d7510035b1
+  languageName: node
+  linkType: hard
+
+"ky@npm:^0.30.0":
+  version: 0.30.0
+  resolution: "ky@npm:0.30.0"
+  checksum: d6ec6461e18cd2e4abb809b0574ff704c2e17bd61248843471c2492dd9486dfeadd4d139a5a6ec194b0175f9bc7b8c634685880d1ac646553a9f440c0982e8d3
+  languageName: node
+  linkType: hard
+
 "lines-and-columns@npm:^1.1.6":
   version: 1.2.4
   resolution: "lines-and-columns@npm:1.2.4"
@@ -1875,6 +1942,24 @@ __metadata:
   version: 0.6.3
   resolution: "negotiator@npm:0.6.3"
   checksum: b8ffeb1e262eff7968fc90a2b6767b04cfd9842582a9d0ece0af7049537266e7b2506dfb1d107a32f06dd849ab2aea834d5830f7f4d0e5cb7d36e1ae55d021d9
+  languageName: node
+  linkType: hard
+
+"node-domexception@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "node-domexception@npm:1.0.0"
+  checksum: ee1d37dd2a4eb26a8a92cd6b64dfc29caec72bff5e1ed9aba80c294f57a31ba4895a60fd48347cf17dd6e766da0ae87d75657dfd1f384ebfa60462c2283f5c7f
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:^3.2.2":
+  version: 3.2.3
+  resolution: "node-fetch@npm:3.2.3"
+  dependencies:
+    data-uri-to-buffer: ^4.0.0
+    fetch-blob: ^3.1.4
+    formdata-polyfill: ^4.0.10
+  checksum: 6f702b2683d6e1c097e99888bedaac4625d6895f2a8a60573a2bc04916f5577ea61d274f26e308c08cfb724b23d45de7d3514c14b59e0293e9809c66c88ac12c
   languageName: node
   linkType: hard
 
@@ -2598,6 +2683,13 @@ __metadata:
     spdx-correct: ^3.0.0
     spdx-expression-parse: ^3.0.0
   checksum: 35703ac889d419cf2aceef63daeadbe4e77227c39ab6287eeb6c1b36a746b364f50ba22e88591f5d017bc54685d8137bc2d328d0a896e4d3fd22093c0f32a9ad
+  languageName: node
+  linkType: hard
+
+"web-streams-polyfill@npm:^3.0.3":
+  version: 3.2.1
+  resolution: "web-streams-polyfill@npm:3.2.1"
+  checksum: b119c78574b6d65935e35098c2afdcd752b84268e18746606af149e3c424e15621b6f1ff0b42b2676dc012fc4f0d313f964b41a4b5031e525faa03997457da02
   languageName: node
   linkType: hard
 

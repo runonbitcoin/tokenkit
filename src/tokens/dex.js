@@ -46,6 +46,20 @@ function isJigBox(subject) {
 }
 
 /**
+ * Fetches a list of jigs owned by the OrderLock for the given class origin.
+ * 
+ * @param {string} origin 
+ * @returns {Promise<Run.Jig[]>}
+ */
+export async function listOffers(origin) {
+  const OrderLock = await loadOrderLock()
+  const url = `https://api.run.network/v1/${ $.run.network }/run-db/unspent?class=${ origin }&lock=${ OrderLock.location }`
+
+  const txids = await ky(url).json()
+  console.log({ txids })
+}
+
+/**
  * Creates and returns an offer from the given parameters.
  * 
  * @param {object} params Offer parameters
@@ -157,7 +171,6 @@ export async function cancelOffer(location) {
 
   const tx = await cancelOfferBaseTx(offer, offerTx.outputs[0])
   tx.inputs[0].script = offerUnlockScript(tx, 0, offerTxOut, true)
-
 
   try {
     await verifyScriptAsync(tx.inputs[0].script, offerTxOut.script, tx, 0, offerTxOut.satoshis)

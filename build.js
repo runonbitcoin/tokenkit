@@ -12,8 +12,12 @@ esbuild.build({
   minify: true,
   keepNames: true,
   sourcemap: true,
+  define: {
+    VARIANT: 'browser'
+  },
   plugins: [
     GlobalsPlugin({
+      'crypto': '{}',
       'run-sdk': 'Run'
     })
   ]
@@ -35,6 +39,9 @@ esbuild.build({
   platform: 'node',
   target: 'node10',
   keepNames: true,
+  define: {
+    VARIANT: 'node'
+  },
   plugins: [
     makeAllPackagesExternalPlugin
   ]
@@ -48,6 +55,9 @@ esbuild.build({
   platform: 'node',
   target: 'node12',
   keepNames: true,
+  define: {
+    VARIANT: 'node'
+  },
   plugins: [
     makeAllPackagesExternalPlugin
   ]
