@@ -1,7 +1,7 @@
 import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import { ftFixture, nftFixture } from '../support/fixtures.js'
-import tokenkit from '../../src/index.js'
+import * as tokenkit from '../../src/index.js'
 import { JigBox } from '../../src/tokens/box.js'
 import { run } from '../support/run.js'
 

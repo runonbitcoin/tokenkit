@@ -8,7 +8,7 @@ import {
   validateParams,
 } from './validations.js'
 
-const { BufferWriter, Transaction } = $.Run.nimble
+const { BufferWriter, Transaction } = $.Run.nimble.classes
 const { opcodes, sighashFlags } = $.Run.nimble.constants
 const { preimage, writePushData, verifyScriptAsync } = $.Run.nimble.functions
 
@@ -133,23 +133,12 @@ export async function takeOffer(location) {
   const offerTxOut = offerTx.outputs[idx]
   const offer = await $.run.load(location)
 
-  const tx = await takeOfferBaseTx(offer)
+  const tx = await withWrappedPurse(() => takeOfferBaseTx(offer))
   tx.inputs[0].script = offerUnlockScript(tx, 0, offerTxOut)
 
-  try {
-    await verifyScriptAsync(tx.inputs[0].script, offerTxOut.script, tx, 0, offerTxOut.satoshis)
-    console.log('NIMBLE VERIFY', true)
-  } catch(e) {
-    console.log('NIMBLE VERIFY', false)
-    console.log(e)
-  }
-
   const rawtx = tx.toHex()
-  console.log(rawtx)
-  return rawtx
-
-  //const txid = await $.run.blockchain.broadcast(rawtx)
-  //return $.run.load(`${txid}_o2`)
+  const _txid = await $.run.blockchain.broadcast(rawtx)
+  return $.run.load(`${_txid}_o2`)
 }
 
 /**
@@ -168,19 +157,9 @@ export async function cancelOffer(location) {
   const tx = await cancelOfferBaseTx(offer, offerTx.outputs[0])
   tx.inputs[0].script = offerUnlockScript(tx, 0, offerTxOut, true)
 
-  try {
-    await verifyScriptAsync(tx.inputs[0].script, offerTxOut.script, tx, 0, offerTxOut.satoshis)
-    console.log('NIMBLE VERIFY', true)
-  } catch(e) {
-    console.log('NIMBLE VERIFY', false)
-    console.log(e)
-  }
-
   const rawtx = tx.toHex()
-  console.log(rawtx)
-
-  //const txid = await $.run.blockchain.broadcast(rawtx)
-  //return $.run.load(`${txid}_o2`)
+  const _txid = await $.run.blockchain.broadcast(rawtx)
+  return $.run.load(`${_txid}_o1`)
 }
 
 // Helper function returns a base tx for the take offer transaction
@@ -231,4 +210,22 @@ function offerUnlockScript(tx, vin, { script, satoshis }, cancel = false) {
   buf.write([cancel ? opcodes.OP_TRUE : opcodes.OP_FALSE])    // cancel op_true or op_false
 
   return buf.toBuffer()
+}
+
+// The OrderLock has a bug where domain is hardcoded to zero. This function
+// wraps the configured purse with a function that replaces the placeholder
+// script with sufficient bytes so the correct fee is calculated.
+async function withWrappedPurse(callback) {
+  const _originalPurse = $.run.purse
+  $.run.purse = {
+    pay(rawtx, parents) {
+      const tx = Transaction.fromHex(rawtx)
+      tx.inputs[0].script = new Array(948).fill(0)
+      return _originalPurse.pay(tx.toHex(), parents)
+    }
+  }
+
+  const res = await callback()
+  $.run.purse = _originalPurse
+  return res
 }

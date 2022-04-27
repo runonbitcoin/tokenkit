@@ -1,7 +1,7 @@
 import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import { ftFixture, nftFixture } from '../support/fixtures.js'
-import tokenkit from '../../src/index.js'
+import * as tokenkit from '../../src/index.js'
 import { run } from '../support/run.js'
 
 chai.use(chaiAsPromised)
@@ -130,7 +130,7 @@ describe('DEX.makeOffer() with non-fungible token', () => {
 })
 
 
-describe.skip('DEX.takeOffer()', () => {
+describe('DEX.takeOffer()', () => {
   let klass, jigbox, offer
   beforeEach(async () => {
     klass = await tokenkit.ft.deploy(ftFixture)
@@ -147,13 +147,18 @@ describe.skip('DEX.takeOffer()', () => {
     })
   })
 
-  it('testing take TODO', async () => {
-    await tokenkit.dex.takeOffer(offer.location)
+  it('accepts the offer, jig is in jigbox', async () => {
+    const jig = await tokenkit.dex.takeOffer(offer.location)
+    await jigbox.sync()
+
+    assert.equal(jig.owner, run.owner.address)
+    assert.equal(jig.amount, 4000)
+    assert.exists(jigbox.jigs.find(j => j.location === jig.location && j.amount === jig.amount))
   })
 })
 
 
-describe.skip('DEX.cancelOffer()', () => {
+describe('DEX.cancelOffer()', () => {
   let klass, jigbox, offer
   beforeEach(async () => {
     klass = await tokenkit.ft.deploy(ftFixture)
@@ -170,7 +175,12 @@ describe.skip('DEX.cancelOffer()', () => {
     })
   })
 
-  it('testing cancel TODO', async () => {
-    await tokenkit.dex.cancelOffer(offer.location)
+  it('cancels the offer, jig is in jigbox', async () => {
+    const jig = await tokenkit.dex.cancelOffer(offer.location)
+    await jigbox.sync()
+
+    assert.equal(jig.owner, run.owner.address)
+    assert.equal(jig.amount, 4000)
+    assert.exists(jigbox.jigs.find(j => j.location === jig.location && j.amount === jig.amount))
   })
 })

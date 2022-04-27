@@ -26,7 +26,6 @@
     "test:types": "tsd"
   },
   "dependencies": {
-    "@runonbitcoin/nimble": "file:///Users/aaron/Dev/run/nimble",
     "ky": "^0.30.0",
     "ky-universal": "^0.10.1"
   },
