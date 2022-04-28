@@ -1,8 +1,7 @@
 import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import { ftFixture, nftFixture } from '../support/fixtures.js'
-import * as tokenkit from '../../src/index.js'
-import { JigBox } from '../../src/tokens/box.js'
+import tokenkit from '../env/tokenkit.js'
 import { run } from '../support/run.js'
 
 chai.use(chaiAsPromised)
@@ -15,8 +14,8 @@ describe('JigBox', () => {
   })
 
   it('new JigBox() instantiates a new box', () => {
-    const box = new JigBox({ contract: klass, type: 'ft' })
-    assert.instanceOf(box, JigBox)
+    const box = new tokenkit.JigBox({ contract: klass, type: 'ft' })
+    assert.instanceOf(box, tokenkit.JigBox)
     assert.deepEqual(box.contract, klass)
     assert.isArray(box.jigs)
     assert.equal(box.type, 'FT')
@@ -24,18 +23,18 @@ describe('JigBox', () => {
 
   it('throws error with invalid type', () => {
     assert.throws(() => {
-      new JigBox({ contract: klass, type: 'xxx' })
+      new tokenkit.JigBox({ contract: klass, type: 'xxx' })
     }, /^Invalid JigBox type/)
   })
 
   it('JigBox.fromClass() instantiates from a class', async () => {
-    const box = await JigBox.fromClass(klass, 'ft')
-    assert.instanceOf(box, JigBox)
+    const box = await tokenkit.JigBox.fromClass(klass, 'ft')
+    assert.instanceOf(box, tokenkit.JigBox)
   })
 
   it('JigBox.fromOrigin() instantiates from an origin', async () => {
-    const box = await JigBox.fromOrigin(klass.origin, 'ft')
-    assert.instanceOf(box, JigBox)
+    const box = await tokenkit.JigBox.fromOrigin(klass.origin, 'ft')
+    assert.instanceOf(box, tokenkit.JigBox)
   })
 })
 

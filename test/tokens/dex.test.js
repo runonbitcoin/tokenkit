@@ -1,7 +1,7 @@
 import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import { ftFixture, nftFixture } from '../support/fixtures.js'
-import * as tokenkit from '../../src/index.js'
+import tokenkit from '../env/tokenkit.js'
 import { run } from '../support/run.js'
 
 chai.use(chaiAsPromised)
@@ -147,13 +147,21 @@ describe('DEX.takeOffer()', () => {
     })
   })
 
-  it('accepts the offer, jig is in jigbox', async () => {
-    const jig = await tokenkit.dex.takeOffer(offer.location)
+  it('returns the txid taking the offer', async () => {
+    const txid = await tokenkit.dex.takeOffer(offer.location)
+    assert.isString(txid)
+    assert.lengthOf(txid, 64)
+  })
+
+  it('puts the token jig in the jigbox', async () => {
+    assert.equal(jigbox.balance, 1000)
+    assert.lengthOf(jigbox.jigs, 1)
+
+    await tokenkit.dex.takeOffer(offer.location)
     await jigbox.sync()
 
-    assert.equal(jig.owner, run.owner.address)
-    assert.equal(jig.amount, 4000)
-    assert.exists(jigbox.jigs.find(j => j.location === jig.location && j.amount === jig.amount))
+    assert.equal(jigbox.balance, 5000)
+    assert.lengthOf(jigbox.jigs, 2)
   })
 })
 
@@ -175,12 +183,20 @@ describe('DEX.cancelOffer()', () => {
     })
   })
 
-  it('cancels the offer, jig is in jigbox', async () => {
-    const jig = await tokenkit.dex.cancelOffer(offer.location)
+  it('returns the txid taking the offer', async () => {
+    const txid = await tokenkit.dex.cancelOffer(offer.location)
+    assert.isString(txid)
+    assert.lengthOf(txid, 64)
+  })
+
+  it('puts the token jig in the jigbox', async () => {
+    assert.equal(jigbox.balance, 1000)
+    assert.lengthOf(jigbox.jigs, 1)
+
+    await tokenkit.dex.cancelOffer(offer.location)
     await jigbox.sync()
 
-    assert.equal(jig.owner, run.owner.address)
-    assert.equal(jig.amount, 4000)
-    assert.exists(jigbox.jigs.find(j => j.location === jig.location && j.amount === jig.amount))
+    assert.equal(jigbox.balance, 5000)
+    assert.lengthOf(jigbox.jigs, 2)
   })
 })

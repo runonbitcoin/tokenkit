@@ -62,3 +62,25 @@ esbuild.build({
     makeAllPackagesExternalPlugin
   ]
 })
+
+esbuild.build({
+  entryPoints: ['test/browser.bundle.js'],
+  outfile: 'dist/tokenkit.tests.js',
+  bundle: true,
+  format: 'iife',
+  platform: 'browser',
+  target: 'es6',
+  keepNames: true,
+  define: {
+    VARIANT: 'browser'
+  },
+  plugins: [
+    GlobalsPlugin({
+      'crypto': '{}',
+      'run-sdk': 'Run',
+      'mocha': 'mocha.Mocha',
+      'chai': 'chai',
+      '../env/tokenkit.js': 'tokenkit'
+    })
+  ]
+})

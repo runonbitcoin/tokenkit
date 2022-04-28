@@ -1,8 +1,7 @@
 import chai, { assert } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import { ftFixture as fixture } from '../support/fixtures.js'
-import * as tokenkit from '../../src/index.js'
-import { JigBox } from '../../src/tokens/box.js'
+import tokenkit from '../env/tokenkit.js'
 import '../support/run.js'
 
 chai.use(chaiAsPromised)
@@ -244,7 +243,7 @@ describe('tokenkit.ft.getJigBox()', () => {
   it('returns the RUN owners JigBox for the given origin', async () => {
     const klass = await tokenkit.ft.deploy(fixture)
     const box = await tokenkit.ft.getJigBox(klass.origin)
-    assert.instanceOf(box, JigBox)
+    assert.instanceOf(box, tokenkit.JigBox)
     assert.equal(box.type, 'FT')
   })
 })

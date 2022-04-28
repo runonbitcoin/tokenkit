@@ -137,8 +137,7 @@ export async function takeOffer(location) {
   tx.inputs[0].script = offerUnlockScript(tx, 0, offerTxOut)
 
   const rawtx = tx.toHex()
-  const _txid = await $.run.blockchain.broadcast(rawtx)
-  return $.run.load(`${_txid}_o2`)
+  return $.run.blockchain.broadcast(rawtx)
 }
 
 /**
@@ -158,8 +157,7 @@ export async function cancelOffer(location) {
   tx.inputs[0].script = offerUnlockScript(tx, 0, offerTxOut, true)
 
   const rawtx = tx.toHex()
-  const _txid = await $.run.blockchain.broadcast(rawtx)
-  return $.run.load(`${_txid}_o1`)
+  return $.run.blockchain.broadcast(rawtx)
 }
 
 // Helper function returns a base tx for the take offer transaction
