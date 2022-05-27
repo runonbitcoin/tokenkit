@@ -1,4 +1,9 @@
 import Run from 'run-sdk'
+import nimble from '@runonbitcoin/nimble'
+
+if (typeof Run.nimble === 'undefined') {
+  Run.nimble = nimble
+}
 
 /**
  * Module to fetch global Run instance.

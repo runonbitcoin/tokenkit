@@ -86,10 +86,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@runonbitcoin/nimble@npm:^1.0.10":
-  version: 1.0.10
-  resolution: "@runonbitcoin/nimble@npm:1.0.10"
-  checksum: eec0c49a60f9d8d768c9e71dfefc54d215007e53b9f27d9d78337f1a3550ce0aecfc5c9ca2c6f58fadd0ffcc0a92299886972571242e716bdf6cf82eb55a700b
+"@runonbitcoin/nimble@npm:^1.0.13":
+  version: 1.0.13
+  resolution: "@runonbitcoin/nimble@npm:1.0.13"
+  checksum: b4e7de91dcbb8355cd6444431710750e4f421dea28669c9cfd5accd1c368610238c3c591ce7ca8b6ffec38d552efd9ccd2fc6b1804b00587f6fe753bdf231481
   languageName: node
   linkType: hard
 
@@ -97,6 +97,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@runonbitcoin/tokenkit@workspace:."
   dependencies:
+    "@runonbitcoin/nimble": ^1.0.13
     chai: ^4.3.6
     chai-as-promised: ^7.1.1
     esbuild: ^0.14.34
@@ -106,7 +107,7 @@ __metadata:
     ky: ^0.30.0
     ky-universal: ^0.10.1
     mocha: ^9.2.2
-    run-sdk: "file:///Users/aaron/Dev/run/run"
+    run-sdk: ^0.6.37
     selenium-webdriver: ^4.1.2
     tsd: ^0.20.0
   peerDependencies:
@@ -2425,13 +2426,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"run-sdk@file:///Users/aaron/Dev/run/run::locator=%40runonbitcoin%2Ftokenkit%40workspace%3A.":
-  version: 0.6.35
-  resolution: "run-sdk@file:///Users/aaron/Dev/run/run#///Users/aaron/Dev/run/run::hash=6ce782&locator=%40runonbitcoin%2Ftokenkit%40workspace%3A."
+"run-sdk@npm:^0.6.37":
+  version: 0.6.37
+  resolution: "run-sdk@npm:0.6.37"
   dependencies:
-    "@runonbitcoin/nimble": ^1.0.10
     bsv: ^1.5.6
-  checksum: a7cc98bfde0bf2a7377c9032366457c0fd4fb90639e2ffc6b272c4bee3d08c6071d387c1a6cc87bf19bba4161cc6ec6fdf27615d517372cae1b49a49308161ad
+  checksum: f01244044e4474db0a4ae12d4bd2356e84aba310bb59bc8ae468fe0f5e01ccbfaf0e8e8cf010f4377e4fe2600aa1a9c78e17e5c2a6c4c313b0744f41783783d7
   languageName: node
   linkType: hard
 
