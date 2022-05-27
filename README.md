@@ -26,6 +26,12 @@ On the web you can load TokenKit from a CDN.
 <script src="https://unpkg.com/@runonbitcoin/tokenkit"></script>
 ```
 
+Before you use TokenKit, you first create a Run instance with your configuration:
+
+```js
+const run = new Run({ network: 'main', purse: '<your-purse-key>', owner: '<your-owner-key>' })
+```
+
 ## Create and mint fungible and non-fungible tokens
 
 Deploy and mint fungible tokens using the `tokenkit.ft` namespace. Pre-upload images and media using [Easy B](https://github.com/runonbitcoin/easy-b).
