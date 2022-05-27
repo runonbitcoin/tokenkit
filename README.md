@@ -1,39 +1,38 @@
-# Run tokenkit
+# Run TokenKit
 
-Run tokenkit provides a simple interface through which to create fungible and non-fungible tokens using [Run](https://run.network).
+TokenKit makes it breathtakingly easy to deploy, mint and interact with fungible and non-fungible tokens using [Run](https://run.network).
 
-This repo contains the source code, but tokenkit is distributed with the `run-sdk`.
+Tokens created with TokenKit are compatible with the [RelayX DEX](https://relayx.com/). TokenKit allows you to interact with the dex to list, create and take offers.
 
-## Interface
+## Getting started
 
-| namespace      | interface                              |
-| -------------- | -------------------------------------- |
-| `tokenkit.ft`  | `TokenInterface` (fungible tokens)     |
-| `tokenkit.nft` | `TokenInterface` (non-fungible tokens) |
-| `tokenkit.dex` | `DexInterface`                         |
+TokenKit is a JavaScript library. Install it with `npm` or `yarn`.
 
-## `TokenInterface`
+```shell
+npm install @runonbitcoin/tokenkit
+# or
+yarn add @runonbitcoin/tokenkit
+```
 
-The `TokenInterface` is an API for creating, minting and upgrading token classes.
+On the web you can load TokenKit from a CDN.
 
-The api is identical for both fungible and non-fungible tokens.
+```html
+<!--
+  It's currently necessary to load nimble separately. In a future version,
+  nimble will be bundled with run-sdk.
+-->
+<script src="https://unpkg.com/run-sdk"></script>
+<script src="https://unpkg.com/@runonbitcoin/nimble"></script>
+<script src="https://unpkg.com/@runonbitcoin/tokenkit"></script>
+```
 
-| function                                             | returns           |
-| ---------------------------------------------------- | ----------------- |
-| `create(params: object)`                             | `Promise<class>`  |
-| `deploy(params: object \| class)`                    | `Promise<Code>`   |
-| `mint(origin: string, recipients: object[])`         | `Promise<string>` |
-| `upgrade(origin: string, params: object \| class)`   | `Promise<Code>`   |
-| `getJigBox(origin: string, params: object \| class)` | `Promise<JigBox>` |
+## Create and mint fungible and non-fungible tokens
 
-### Create and mint fungible tokens
-
-Pre-upload images using [Easy B](https://github.com/runonbitcoin/easy-b).
+Deploy and mint fungible tokens using the `tokenkit.ft` namespace. Pre-upload images and media using [Easy B](https://github.com/runonbitcoin/easy-b).
 
 ```js
 // Returns deployed Run Code
 const MyCoin = tokenkit.ft.deploy({
-  className: 'MyCoin',
   metadata: {
     name: 'My Coin',
     description: 'My example token',
@@ -52,11 +51,10 @@ await tokenkit.ft.mint(MyCoin.origin, [
 ])
 ```
 
-### Create and mint non-fungible tokens
+The API for non-fungible tokens is almost identical, but note the functions are accessed on the `tokenkit.nft` namespace.
 
 ```js
-const MyNFT = await tokenkit.ft.deploy({
-  className: 'MyNFT',
+const MyNFT = await tokenkit.nft.deploy({
   metadata: {
     name: 'My NFT',
     description: 'My example NFT',
@@ -66,7 +64,7 @@ const MyNFT = await tokenkit.ft.deploy({
 })
 
 // Mint tokens to many recipients - returns txid
-await tokenkit.ft.mint(MyNFT.origin, [
+await tokenkit.nft.mint(MyNFT.origin, [
   '1DsPKMo8s9F4a22Px5F8RpAQoV1dDQ5HD9',
   '1GPe3sjxeDmvXUjP9jaZwnBEunvRLghahi',
   '1EtzqQMMaP8xEjv2mzHKrAN3LXrSEtHPAQ',
@@ -78,19 +76,7 @@ await tokenkit.ft.mint(MyNFT.origin, [
 
 A `JigBox` is, well, a box of Jigs. It provides a simple interface through which you can work with the current Run owner's jigs for a given class.
 
-The JigBox makes it simple to combine, send and burn tokens.
-
-| property / function                           | returns           |
-| --------------------------------------------- | ----------------- |
-| `contract`                                    | `Code`            |
-| `type`                                        | `"ft"` or `"nft"` |
-| `jigs`                                        | `Jig[]`           |
-| `balance`                                     | `number`          |
-| `balanceAsDecimal`                            | `string`          |
-| `send(owner: string \| Lock, amount: number)` | `Promise<string>` |
-| `sendMany(recipients: object[])`              | `Promise<string>` |
-| `burn(amount: number)`                        | `Promise<string>` |
-| `sync()`                                      | `Promise<void>`   |
+When used with fungible token classes, JigBoxes make it simple to combine, send and burn tokens.
 
 ```js
 const box = await tokenkit.ft.getJigBox(origin)
@@ -129,16 +115,9 @@ box.jigs                // array of jigs
 box.sync()              // syncs the jig box
 ```
 
-## `DexInterface`
+## Interacting with the RelayX DEX
 
-Tokens created with tokenkit are compatible with the [RelayX DEX](https://relayx.com/). The `DexInterface` allows you to interact with the dex, and buy and sell tokens.
-
-| function                        | returns           |
-| ------------------------------- | ----------------- |
-| `listOffers(origin: string)`    | `Promise<Jig[]>`  |
-| `makeOffer(params: object)`     | `Promise<Jig>`    |
-| `takeOffer(location: string)`   | `Promise<string>` |
-| `cancelOffer(location: string)` | `Promise<string>` |
+Tokens created with tokenkit are compatible with the [RelayX DEX](https://relayx.com/).
 
 ```js
 // Make a sell offer from a JigBox (for fungible tokens)
@@ -173,7 +152,6 @@ For simple changes, for example to upgrade metadata, the `TokenInterface` provid
 
 ```js
 const upgradedCode = tokenkit.nft.upgrade(origin, {
-  className: 'MyCoin',
   metadata: {
     image: 'b://30dc4529b612dc76e35c9a54474ad56053c5a033d432f4152ce34c6aca2981ac',
     ...
@@ -202,3 +180,57 @@ const MyCoin = await tokenkit.ft.deploy({
 await MyCoin.transfer('13fDD3U6PdM5VWHwgLDPwZ3itzgU2BRcDW')
 ```
 
+## API
+
+### Top-level interface
+
+| namespace      | interface                              |
+| -------------- | -------------------------------------- |
+| `tokenkit.ft`  | `TokenInterface` (fungible tokens)     |
+| `tokenkit.nft` | `TokenInterface` (non-fungible tokens) |
+| `tokenkit.dex` | `DexInterface`                         |
+
+### `TokenInterface`
+
+The `TokenInterface` is an API for creating, minting and upgrading token classes.
+
+| function                                             | returns           |
+| ---------------------------------------------------- | ----------------- |
+| `create(params: object)`                             | `Promise<class>`  |
+| `deploy(params: object \| class)`                    | `Promise<Code>`   |
+| `mint(origin: string, recipients: object[])`         | `Promise<string>` |
+| `upgrade(origin: string, params: object \| class)`   | `Promise<Code>`   |
+| `getJigBox(origin: string, params: object \| class)` | `Promise<JigBox>` |
+
+### `JigBox` API
+
+The JigBox API makes it simple to combine, send and burn tokens.
+
+| property / function                           | returns           |
+| --------------------------------------------- | ----------------- |
+| `contract`                                    | `Code`            |
+| `type`                                        | `"ft"` or `"nft"` |
+| `jigs`                                        | `Jig[]`           |
+| `balance`                                     | `number`          |
+| `balanceAsDecimal`                            | `string`          |
+| `send(owner: string \| Lock, amount: number)` | `Promise<string>` |
+| `sendMany(recipients: object[])`              | `Promise<string>` |
+| `burn(amount: number)`                        | `Promise<string>` |
+| `sync()`                                      | `Promise<void>`   |
+
+### `DexInterface`
+
+The `DexInterface` allows you to interact with the [RelayX DEX](https://relayx.com/), to list, buy and sell tokens.
+
+| function                        | returns           |
+| ------------------------------- | ----------------- |
+| `listOffers(origin: string)`    | `Promise<Jig[]>`  |
+| `makeOffer(params: object)`     | `Promise<Jig>`    |
+| `takeOffer(location: string)`   | `Promise<string>` |
+| `cancelOffer(location: string)` | `Promise<string>` |
+
+## License
+
+TokenKit is open source and released under the [MIT License](https://github.com/runonbitcoin/tokenkit/blob/master/LICENSE).
+
+Copyright (c) 2022 Run Interactive, Inc.
