@@ -2,7 +2,7 @@
 
 TokenKit makes it breathtakingly easy to deploy, mint and interact with fungible and non-fungible tokens using [Run](https://run.network).
 
-Tokens created with TokenKit are compatible with the [RelayX DEX](https://relayx.com/). TokenKit allows you to interact with the dex to list, create and take offers.
+Tokens created with TokenKit are compatible with the [RelayX DEX](https://relayx.com/).
 
 ## Getting started
 
@@ -121,37 +121,6 @@ box.jigs                // array of jigs
 box.sync()              // syncs the jig box
 ```
 
-## Interacting with the RelayX DEX
-
-Tokens created with tokenkit are compatible with the [RelayX DEX](https://relayx.com/).
-
-```js
-// Make a sell offer from a JigBox (for fungible tokens)
-const box = await tokenkit.ft.getJigBox(origin)
-const offer = await tokenkit.dex.makeOffer({
-  jigbox: box,
-  amount: 5000,                                     // number of tokens to sell
-  address: '13fDD3U6PdM5VWHwgLDPwZ3itzgU2BRcDW',    // purse address to receive payment
-  satoshis: 100000,                                 // required payment for all offered tokens
-})
-
-// Make a sell offer from a Jig (for NFTs)
-const offer = await tokenkit.dex.makeOffer({
-  jig: jig,
-  address: '13fDD3U6PdM5VWHwgLDPwZ3itzgU2BRcDW',    // purse address to receive payment
-  satoshis: 50000,                                  // required payment for jig
-})
-
-// Fetch a list of jigs offered for a given class
-const offers = await tokenkit.dex.listOffers(origin)
-
-// Accept an offer - returns txid, resync jigbox to see acquired tokens
-await tokenkit.dex.takeOffer(offer.location)
-
-// Owners can cancel their own offers - returns txid
-await tokenkit.dex.cancelOffer(offer.location)
-```
-
 ## Upgrading classes
 
 For simple changes, for example to upgrade metadata, the `TokenInterface` provides an easy upgrade function.
@@ -194,7 +163,6 @@ await MyCoin.transfer('13fDD3U6PdM5VWHwgLDPwZ3itzgU2BRcDW')
 | -------------- | -------------------------------------- |
 | `tokenkit.ft`  | `TokenInterface` (fungible tokens)     |
 | `tokenkit.nft` | `TokenInterface` (non-fungible tokens) |
-| `tokenkit.dex` | `DexInterface`                         |
 
 ### `TokenInterface`
 
@@ -223,17 +191,6 @@ The JigBox API makes it simple to combine, send and burn tokens.
 | `sendMany(recipients: object[])`              | `Promise<string>` |
 | `burn(amount: number)`                        | `Promise<string>` |
 | `sync()`                                      | `Promise<void>`   |
-
-### `DexInterface`
-
-The `DexInterface` allows you to interact with the [RelayX DEX](https://relayx.com/), to list, buy and sell tokens.
-
-| function                        | returns           |
-| ------------------------------- | ----------------- |
-| `listOffers(origin: string)`    | `Promise<Jig[]>`  |
-| `makeOffer(params: object)`     | `Promise<Jig>`    |
-| `takeOffer(location: string)`   | `Promise<string>` |
-| `cancelOffer(location: string)` | `Promise<string>` |
 
 ## License
 

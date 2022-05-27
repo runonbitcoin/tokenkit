@@ -82,18 +82,10 @@ export interface TokenInterface {
   getJigBox(origin: string): Promise<JigBox>;
 }
 
-export interface DexInterface {
-  listOffers(origin: string): Promise<RunJig[]>;
-  makeOffer(params: OfferParams): Promise<RunJig>;
-  takeOffer(location: string): Promise<txid>;
-  cancelOffer(location: string): Promise<txid>;
-}
-
 export interface UtilInterface {
   upgradeClass(origin: string, newClass: Class, updated?: string[]): Promise<RunCode>
 }
 
 export const ft: TokenInterface;
 export const nft: TokenInterface;
-export const dex: DexInterface;
 export const util: UtilInterface;

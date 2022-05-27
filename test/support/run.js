@@ -2,6 +2,8 @@ import Run from 'run-sdk'
 
 export const run = new Run({ network: 'mock', trust: 'state' })
 
+run.blockchain.fund(run.purse.address, 1000000000000)
+
 // TODO: Use nimble.
 // Disable bsv1 script verification because the OP_PUSH_TX tests fail due to bug
 import bsv from 'bsv'
