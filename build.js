@@ -19,7 +19,8 @@ esbuild.build({
     GlobalsPlugin({
       'crypto': '{}',
       'run-sdk': 'Run',
-      '@runonbitcoin/nimble': 'nimble'
+      '@runonbitcoin/nimble': 'nimble',
+      'bsv': 'bsv'
     })
   ]
 })
@@ -80,6 +81,7 @@ esbuild.build({
       'crypto': '{}',
       'run-sdk': 'Run',
       '@runonbitcoin/nimble': 'nimble',
+      'bsv': 'bsv',
       'mocha': 'mocha.Mocha',
       'chai': 'chai',
       '../env/tokenkit.js': 'tokenkit'
