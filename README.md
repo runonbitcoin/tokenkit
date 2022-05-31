@@ -1,3 +1,6 @@
+
+[![Build Status](https://droneci.run.network/api/badges/runonbitcoin/tokenkit/status.svg)](https://droneci.run.network/runonbitcoin/tokenkit)
+
 # Run TokenKit
 
 TokenKit makes it breathtakingly easy to deploy, mint and interact with fungible and non-fungible tokens using [Run](https://run.network).
