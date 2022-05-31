@@ -1,0 +1,13 @@
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+  - name: test
+    image: node:16
+    commands:
+      - yarn install
+      - yarn run build
+      - yarn run test
+      - yarn run test:cjs
+      - yarn run test:mjs

@@ -12,3 +12,6 @@
 dist
 node_modules
 test/demo.js
+
+# editors
+.idea
