@@ -11,3 +11,4 @@ steps:
       - yarn run test
       - yarn run test:cjs
       - yarn run test:mjs
+      - yarn run test:types

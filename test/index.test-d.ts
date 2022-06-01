@@ -4,14 +4,14 @@ import tokenkit, {
   RunCode,
   JigBox,
   TokenInterface,
-  DexInterface,
+  //DexInterface,
   UtilInterface,
 } from '../src'
 
 // Default interface
 expectType<TokenInterface>( tokenkit.ft )
 expectType<TokenInterface>( tokenkit.nft )
-expectType<DexInterface>( tokenkit.dex )
+//expectType<DexInterface>( tokenkit.dex )
 expectType<UtilInterface>( tokenkit.util )
 
 // Token interface

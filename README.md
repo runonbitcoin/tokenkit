@@ -17,6 +17,14 @@ npm install @runonbitcoin/tokenkit
 yarn add @runonbitcoin/tokenkit
 ```
 
+With node, `import` or `require` the module.
+
+```js
+import * as tokenkit from '@runonbitcoin/tokenkit'
+// or
+const tokenkit = require('@runonbitcoin/tokenkit')
+```
+
 On the web you can load TokenKit from a CDN.
 
 ```html
@@ -24,6 +32,7 @@ On the web you can load TokenKit from a CDN.
   It's currently necessary to load nimble separately. In a future version,
   nimble will be bundled with run-sdk.
 -->
+<script src="https://unpkg.com/bsv@1.5.6"></script>
 <script src="https://unpkg.com/run-sdk"></script>
 <script src="https://unpkg.com/@runonbitcoin/nimble"></script>
 <script src="https://unpkg.com/@runonbitcoin/tokenkit"></script>

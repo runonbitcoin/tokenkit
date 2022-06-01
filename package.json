@@ -5,10 +5,11 @@
   "type": "module",
   "exports": {
     ".": {
-      "require": "./dist/tokenkit.cjs.js",
-      "import": "./dist/tokenkit.esm.js"
+      "require": "./dist/tokenkit.cjs",
+      "import": "./dist/tokenkit.mjs"
     }
   },
+  "main": "./dist/tokenkit.cjs",
   "browser": "dist/tokenkit.min.js",
   "unpkg": "dist/tokenkit.min.js",
   "types": "src/index.d.ts",
