@@ -50,7 +50,7 @@ Deploy and mint fungible tokens using the `tokenkit.ft` namespace. Pre-upload im
 
 ```js
 // Returns deployed Run Code
-const MyCoin = tokenkit.ft.deploy({
+const MyCoin = await tokenkit.ft.deploy({
   metadata: {
     name: 'My Coin',
     description: 'My example token',
@@ -138,7 +138,7 @@ box.sync()              // syncs the jig box
 For simple changes, for example to upgrade metadata, the `TokenInterface` provides an easy upgrade function.
 
 ```js
-const upgradedCode = tokenkit.nft.upgrade(origin, {
+const upgradedCode = await tokenkit.nft.upgrade(origin, {
   metadata: {
     image: 'b://30dc4529b612dc76e35c9a54474ad56053c5a033d432f4152ce34c6aca2981ac',
     ...
@@ -151,7 +151,7 @@ A lower level function can be used for upgrading custom classes not built with t
 ```js
 // By default all static properties from the original class are copied to the
 // new class. Avoid this by explicitly listing changed static props.
-const upgradedCode = tokenkit.util.upgradeClass(origin, NewClass, ['metadata', 'license'])
+const upgradedCode = await tokenkit.util.upgradeClass(origin, NewClass, ['metadata', 'license'])
 ```
 
 ## Transferring classes
